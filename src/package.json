@@ -1,0 +1,34 @@
+{
+  "name": "swarmapp-api",
+  "version": "1.0.0",
+  "description": "A javascript wrapper for swarmapp (foursquare) API",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/6degrees/swarmapp-api.git"
+  },
+  "keywords": [
+    "api",
+    "javascript",
+    "js",
+    "swarm",
+    "swarmapp",
+    "foursquare",
+    "wrapper",
+    "checkin"
+  ],
+  "author": "Mohannad F. Otaibi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/6degrees/swarmapp-api/issues"
+  },
+  "homepage": "https://github.com/6degrees/swarmapp-api#readme",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "lodash": "^4.17.21",
+    "querystring": "^0.2.1"
+  }
+}
