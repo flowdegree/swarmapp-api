@@ -28,7 +28,7 @@ class SwarmappApi {
 
         const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
 
-		return result;
+		return result.data.response.friends;
 	}
 
 	getLastSeen(options = {}) {
@@ -79,11 +79,12 @@ class SwarmappApi {
 	}
 
 	// returns user timeline after timestamp
-	async getRecent(options) {
+	async getRecent(options = {}) {
+       
 		_.defaults(options, {
 			'limit': 60,
 		});
-
+        
         delete this.config.limit;
 
 		_.defaults(this.config, {
@@ -103,19 +104,21 @@ class SwarmappApi {
             }
         }); 
 
-		return result;
+		return result.data.response.recent;
 	}
 
     // Checkin Functions
-	check_in(location_id) {
+	async checkIn(location_id) {
+        this.config.venueId = location_id;
+        const result = await axios.post(this.basePath + 'checkins/' + '/add', querystring.stringify(this.config));
+		return result;
+	}
+
+	silentCheckIn(location_id) {
 		return location_id;
 	}
 
-	silent_check_in(location_id) {
-		return location_id;
-	}
-
-	add_here_now() {
+	addHereNow() {
 		// update ll to this location location
 		// do a random explore request
 		// checkin
@@ -134,16 +137,17 @@ class SwarmappApi {
 		return result;
 	}
 
-	likeUnliked() {
+	async likeUnliked(limit = 40) {
         try {
             const succeeded = [];
 
-            const result = this.getRecent();
+            const recent = await this.getRecent({limit: limit});
 
-            result.response.recent.forEach(checkin => {
+            recent.forEach(async (checkin) => {
+                console.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
                 if(checkin.like == false) {
-                    const liked_result = this.likeCheckin(checkin.id);
-                    console.log(liked);  
+                    const liked_result = await this.likeCheckin(checkin.id);
+                    console.log('liked');
                     succeeded.push(liked_result);
                 }
             });
@@ -152,10 +156,6 @@ class SwarmappApi {
         } catch (error) {
             console.error(error);
         }	
-	}
-
-	auto_like() {
-		return;
 	}
 
     // Utility functions
