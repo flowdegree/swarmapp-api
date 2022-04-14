@@ -28,20 +28,25 @@ async function likeUnliked(){
 }
 
 async function runTests(){
-    // test getting friends list
-    await testFriends();
+    try {
+        // test getting friends list
+        await testFriends();
 
-    // test getting recent checkins
-    await testRecent();
+        // test getting recent checkins
+        await testRecent();
+        
+        // test liking last checkin
+        await testLikeCheckin();
+
+        // test check in abqaiq
+        await testCheckin();
+
+        // test liking recent 20 unliked 
+        await likeUnliked();
+    } catch (error) {
+        console.error(error.response.statusText);
+    }
     
-    // test liking last checkin
-    await testLikeCheckin();
-
-    // test check in abqaiq
-    await testCheckin();
-
-    // test liking recent 20 unliked 
-    await likeUnliked();
 }
 
 runTests();
