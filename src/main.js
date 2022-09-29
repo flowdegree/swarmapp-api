@@ -11,7 +11,7 @@ class SwarmappApi {
 			// A random coordinate to use between calls imitating regular behavior
 			'll': '26.30' + this.between(340000000000, 499999999999) + ',50.1' + this.between(2870000000000, 3119999999999),
 		};
-		this.basePath = 'https://api.foursquare.com/v2/';
+		    this.basePath = "https://api.foursquare.com/v2/multi?";
 	}
 
 	// Get Commands
@@ -26,9 +26,11 @@ class SwarmappApi {
 			'limit': 100,
 		});
 
-        const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
-
-		return result.data.response.friends;
+        const result = await axios.get(this.basePath, { 
+		'params': { ...this.config, requests: `/users/${options.user_id}` }, 
+	});
+		
+		return result.data.response.responses[0].response.user.friends;
 	}
 
 	getLastSeen(options = {}) {
