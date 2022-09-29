@@ -57,10 +57,11 @@ class SwarmappApi {
 			'limit': 100,
 		});
 
-        const result = await axios.get(this.basePath + 'users/' + options.user_id, { 'params': this.config });
+    const result = await axios.get(this.basePath, {
+      params: { ...this.config, requests: `/users/${options.user_id}` },
+    });
 
-		return result;
-	}
+    return result.data.response.responses[0].response.user;
 
 	async getCheckins(options = {}) {
         _.defaults(options, {
