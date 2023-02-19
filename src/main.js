@@ -13,6 +13,20 @@ class SwarmappApi {
 		};
 		this.basePath = 'https://api.foursquare.com/v2/';
 	}
+	
+	async login(username, password, client_id, client_secret) {
+		const params = {
+		  client_id: client_id,
+		  client_secret: client_secret,
+		  username: username,
+		  password: password,
+		  grant_type: 'password',
+		};
+		const response = await axios.post(this.basePath + '/oauth2/access_token', null, { params });
+		this.config.access_token = response.data.access_token;
+		
+		return response.data.access_token;
+	}
 
 	// Get Commands
 	async getFriends(options = {}) {
@@ -30,7 +44,7 @@ class SwarmappApi {
 
 		return result.data.response.friends;
 	}
-
+  
 	getLastSeen(options = {}) {
 
 		_.defaults(options, {
@@ -68,6 +82,7 @@ class SwarmappApi {
 		});
 
         delete this.config.afterTimeStamp;
+		
 		_.defaults(this.config, {
 			'USER_ID': 'self',
 			'limit': 100,
@@ -76,6 +91,24 @@ class SwarmappApi {
 
         const result = await axios.get(this.basePath + 'users/' + options.user_id + '/checkins', { 'params': this.config });
 		return result;
+	}
+
+	async getCheckinsByUserId(userId) {
+		_.defaults(this.config, {
+			'user_id': userId
+		});
+
+		delete this.config.afterTimeStamp;
+
+		_.defaults(this.config, {
+			'user_id': userId,
+			'limit': 100,
+			'afterTimestamp': options.afterTimestamp,
+		});
+		
+		const response = await axios.get(this.basePath + '/users/' + options.user_id + '/checkins', { 'params': this.config });
+		return response.data;
+
 	}
 
 	// returns user timeline after timestamp
