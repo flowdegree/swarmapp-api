@@ -2,6 +2,9 @@ const _ = require('lodash');
 const axios = require('axios').default;
 const querystring = require('querystring');
 
+// some functions willl not work if the oauth_token was generated through an application created after 2021.
+// you may use a man in the middle proxy to detect your mobile app oauth token
+
 class SwarmappApi {
 	constructor(config) {
 		this.config = {
@@ -16,16 +19,22 @@ class SwarmappApi {
 	
 	async login(username, password, client_id, client_secret) {
 		const params = {
-		  client_id: client_id,
-		  client_secret: client_secret,
-		  username: username,
-		  password: password,
-		  grant_type: 'password',
-		};
-		const response = await axios.post(this.basePath + '/oauth2/access_token', null, { params });
-		this.config.access_token = response.data.access_token;
-		
-		return response.data.access_token;
+			client_id: client_id,
+			client_secret: client_secret,
+			username: username,
+			password: password,
+			grant_type: 'password',
+		  };
+
+		try {
+			const response = await axios.post(this.basePath + '/oauth2/access_token', null, { params });
+			this.config.access_token = response.data.access_token;
+			
+			return response.data.access_token;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		}
 	}
 
 	// Get Commands
@@ -40,9 +49,12 @@ class SwarmappApi {
 			'limit': 100,
 		});
 
-        const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
-
-		return result.data.response.friends;
+		try {
+			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
+			return result.data.response.friends;
+		} catch (error) {
+			console.error("Error occured", error)
+		}  
 	}
   
 	getLastSeen(options = {}) {
@@ -58,7 +70,11 @@ class SwarmappApi {
 			'limit': options.limit,
 		});
 
-		return this.getUser(options);
+		try {
+			return this.getUser(options);
+		} catch (error) {
+			console.error("Error occured", error)
+		}	
 	}
 
 	async getUser(options = {}) {
@@ -71,9 +87,13 @@ class SwarmappApi {
 			'limit': 100,
 		});
 
-        const result = await axios.get(this.basePath + 'users/' + options.user_id, { 'params': this.config });
-
-		return result;
+		try {
+			const result = await axios.get(this.basePath + 'users/' + options.user_id, { 'params': this.config });
+			return result;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		} 
 	}
 
 	async getCheckins(options = {}) {
@@ -89,8 +109,13 @@ class SwarmappApi {
 			'afterTimestamp': options.afterTimestamp,
 		});
 
-        const result = await axios.get(this.basePath + 'users/' + options.user_id + '/checkins', { 'params': this.config });
-		return result;
+		try {
+			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/checkins', { 'params': this.config });
+			return result;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		}        
 	}
 
 	async getCheckinsByUserId(userId) {
@@ -105,10 +130,13 @@ class SwarmappApi {
 			'limit': 100,
 			'afterTimestamp': options.afterTimestamp,
 		});
-		
-		const response = await axios.get(this.basePath + '/users/' + options.user_id + '/checkins', { 'params': this.config });
-		return response.data;
 
+		try {
+			const response = await axios.get(this.basePath + '/users/' + options.user_id + '/checkins', { 'params': this.config });
+			return response.data;
+		} catch (error) {
+			console.error("Error occured", error)
+		}
 	}
 
 	// returns user timeline after timestamp
@@ -130,21 +158,32 @@ class SwarmappApi {
 			this.config.ll = options.ll;
 		}
 
-        const result = await axios.get(this.basePath + 'checkins/recent', { 
-            'params': this.config, 
-            paramsSerializer: params => { 
-                return querystring.stringify(params);
-            }
-        }); 
-
-		return result.data.response.recent;
+		try {
+			const result = await axios.get(this.basePath + 'checkins/recent', { 
+				'params': this.config, 
+				paramsSerializer: params => { 
+					return querystring.stringify(params);
+				}
+			}); 
+	
+			return result.data.response.recent;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		} 
 	}
 
     // Checkin Functions
 	async checkIn(location_id) {
         this.config.venueId = location_id;
-        const result = await axios.post(this.basePath + 'checkins/' + '/add', querystring.stringify(this.config));
-		return result;
+
+		try {
+			const result = await axios.post(this.basePath + 'checkins/' + '/add', querystring.stringify(this.config));
+			return result;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		} 
 	}
 
 	silentCheckIn(location_id) {
@@ -166,8 +205,13 @@ class SwarmappApi {
 
     // Like Functions
 	async likeCheckin(checkin_id) {
-		const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
-		return result;
+		try {
+			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
+			return result;
+		} catch (error) {
+			console.error("Error occured", error)
+			return;
+		}	
 	}
 
 	async likeUnliked(limit = 40) {
@@ -187,7 +231,7 @@ class SwarmappApi {
 
             return succeeded;
         } catch (error) {
-            console.error(error);
+            console.error("Error occured", error);
         }	
 	}
 
