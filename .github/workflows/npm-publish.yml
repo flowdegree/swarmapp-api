@@ -15,9 +15,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: cd src
       - run: npm ci
+        working-directory: ./src
       - run: npm test
+        working-directory: ./src
 
   publish-npm:
     needs: build
@@ -28,8 +29,9 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: cd src
       - run: npm ci
+        working-directory: ./src
       - run: npm publish
+        working-directory: ./src
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
