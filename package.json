@@ -1,10 +1,11 @@
 {
   "name": "swarmapp-api",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A javascript wrapper for swarmapp (foursquare) API",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Dummy Test\""
+    "test": "echo \"Dummy Test\"",
+    "mytest": "node ./test/test.js"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
   "homepage": "https://github.com/6degrees/swarmapp-api#readme",
   "dependencies": {
     "axios": "^0.26.1",
+    "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
     "querystring": "^0.2.1"
   }

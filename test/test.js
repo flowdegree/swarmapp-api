@@ -1,5 +1,5 @@
 require('dotenv').config()
-const swarmappapi = require('swarmapp-api');
+const swarmappapi = require('../main');
 
 const swarm = new swarmappapi({ api_key: process.env.token });
 
@@ -30,21 +30,23 @@ async function likeUnliked(){
 async function runTests(){
     try {
         // test getting friends list
-        await testFriends();
+        await swarm.initialize();
+        console.log(await swarm.getGeos());
+        //await testFriends();
 
         // test getting recent checkins
-        await testRecent();
+        //await testRecent();
         
         // test liking last checkin
-        await testLikeCheckin();
+        //await testLikeCheckin();
 
         // test check in abqaiq
-        await testCheckin();
+        //await testCheckin();
 
         // test liking recent 20 unliked 
-        await likeUnliked();
+        //await likeUnliked();
     } catch (error) {
-        console.error(error.response.statusText);
+        console.error(error);
     }
     
 }

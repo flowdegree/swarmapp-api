@@ -16,7 +16,20 @@ class SwarmappApi {
 		};
 		this.basePath = 'https://api.foursquare.com/v2/';
 	}
+
+	async initialize(){
+		const response = await this.getUser();
+		this.user = response.data.response.user;
+		this.log("hello");
+	}
 	
+	log(message){
+		console.log(`${new Date().toLocaleString()} - ${this.user.firstName}(${this.user.id}) - `, message);
+	}
+	error(message){
+		console.error(`${new Date().toLocaleString()} - ${this.user.firstName}(${this.user.id}) - Error:`, message);
+	}
+
 	async login(username, password, client_id, client_secret) {
 		const params = {
 			client_id: client_id,
@@ -32,14 +45,13 @@ class SwarmappApi {
 			
 			return response.data.access_token;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		}
 	}
 
 	// Get Commands
 	async getFriends(options = {}) {
-
 		_.defaults(options, {
 			'user_id': 'self',
 		});
@@ -53,7 +65,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
 			return result.data.response.friends;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 		}  
 	}
   
@@ -73,7 +85,7 @@ class SwarmappApi {
 		try {
 			return this.getUser(options);
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 		}	
 	}
 
@@ -91,7 +103,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + options.user_id, { 'params': this.config });
 			return result;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		} 
 	}
@@ -113,12 +125,12 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/checkins', { 'params': this.config });
 			return result;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		}        
 	}
 
-	async getCheckinsByUserId(userId) {
+	async getCheckinsByUserId(userId = 'SELF') {
 		_.defaults(this.config, {
 			'user_id': userId
 		});
@@ -135,7 +147,23 @@ class SwarmappApi {
 			const response = await axios.get(this.basePath + '/users/' + options.user_id + '/checkins', { 'params': this.config });
 			return response.data;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
+		}
+	}
+
+	async getGeos(userId){
+		_.defaults(this.config, {
+			'user_id': this.user.id
+		});
+
+		delete this.config.afterTimeStamp;
+
+
+		try {
+			const response = await axios.get(this.basePath + '/users/' + this.config.user_id + '/map', { 'params': this.config });
+			return response.data.response;
+		} catch (error) {
+			this.error(error)
 		}
 	}
 
@@ -154,7 +182,7 @@ class SwarmappApi {
 		});
         
 		if(options.ll) {
-			console.log('found location');
+			this.log('found location');
 			this.config.ll = options.ll;
 		}
 
@@ -168,7 +196,7 @@ class SwarmappApi {
 	
 			return result.data.response.recent;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		} 
 	}
@@ -181,7 +209,7 @@ class SwarmappApi {
 			const result = await axios.post(this.basePath + 'checkins/' + '/add', querystring.stringify(this.config));
 			return result;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		} 
 	}
@@ -209,7 +237,7 @@ class SwarmappApi {
 			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
 			return result;
 		} catch (error) {
-			console.error("Error occured", error)
+			this.error(error)
 			return;
 		}	
 	}
@@ -221,17 +249,17 @@ class SwarmappApi {
             const recent = await this.getRecent({limit: limit});
 
             recent.forEach(async (checkin) => {
-                console.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
+                this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
                 if(checkin.like == false) {
                     const liked_result = await this.likeCheckin(checkin.id);
-                    console.log('liked');
+                    this.log('liked');
                     succeeded.push(liked_result);
                 }
             });
 
             return succeeded;
         } catch (error) {
-            console.error("Error occured", error);
+            this.error(error);
         }	
 	}
 
