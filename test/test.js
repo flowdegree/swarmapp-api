@@ -31,7 +31,12 @@ async function runTests(){
     try {
         // test getting friends list
         await swarm.initialize();
-        console.log(await swarm.getGeos());
+        //const followings = await swarm.getFollowings();
+        //const followers = await swarm.getFollowers();
+        const friends = await swarm.getFriends();
+        //console.log(followings);
+        //console.log(followers);
+        console.log(friends);
         //await testFriends();
 
         // test getting recent checkins

@@ -10,11 +10,12 @@ class SwarmappApi {
 		this.config = {
 			'oauth_token': config.api_key,
 			'm': 'swarm',
-			'v': '20200917',
+			'v': '20220917',
 			// A random coordinate to use between calls imitating regular behavior
 			'll': '26.30' + this.between(340000000000, 499999999999) + ',50.1' + this.between(2870000000000, 3119999999999),
 		};
 		this.basePath = 'https://api.foursquare.com/v2/';
+		this.initialize();
 	}
 
 	async initialize(){
@@ -51,19 +52,65 @@ class SwarmappApi {
 	}
 
 	// Get Commands
+	// TODO: requires testing, does not accept non swarmapp (mobile) oauth tokens
 	async getFriends(options = {}) {
 		_.defaults(options, {
 			'user_id': 'self',
 		});
 
+		delete this.config.m;
+
+
 		_.defaults(this.config, {
-			'USER_ID': 'self',
-			'limit': 100,
+			'user_id': 'self',
+			'm': 'swarm'
 		});
 
 		try {
 			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/friends', { 'params': this.config });
 			return result.data.response.friends;
+		} catch (error) {
+			this.error(error)
+		}  
+	}
+
+	// TODO: works only for foursquare client, requires more testing
+	async getFollowings(options = {}) {
+		_.defaults(options, {
+			'user_id': 'self',
+		});
+
+		delete this.config.m;
+
+		_.defaults(this.config, {
+			'USER_ID': 'self',
+			'm': 'foursquare',
+		});
+
+		try {
+			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/following', { 'params': this.config });
+			return result.data.response.following;
+		} catch (error) {
+			this.error(error)
+		}  
+	}
+
+	// TODO: works only for foursquare client, requires more testing
+	async getFollowers(options = {}) {
+		_.defaults(options, {
+			'user_id': 'self',
+		});
+
+		delete this.config.m;
+
+		_.defaults(this.config, {
+			'user_id': 'self',
+			'm': 'foursquare',
+		});
+
+		try {
+			const result = await axios.get(this.basePath + 'users/' + options.user_id + '/followers', { 'params': this.config });
+			return result.data.response.followers;
 		} catch (error) {
 			this.error(error)
 		}  
