@@ -29,7 +29,7 @@ jobs:
       - run: npm ci
       - run: npm version patch -m "Bump version to %s [skip ci]"
         env:
-          GITHUB_TOKEN: ${{secrets.npm_token}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
