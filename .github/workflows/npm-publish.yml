@@ -24,19 +24,16 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-          registry-url: https://registry.npmjs.org/
           cache: 'npm'
       - run: npm ci
-      - name: Set git identity
-        run: |
+      - run: |
+          VERSION=$(node -p -e "require('./package.json').version")
           git config --global user.email "mohannad.otaibi@gmail.com"
           git config --global user.name "Mohannad Otaibi"
-      - run: npm version minor -m "Bump version to %s [skip ci]"
-      - run: echo "::set-output name=version::$(jq -r .version package.json)"
-        id: get_version
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
-      - run: npm publish
+          git tag "$VERSION"
+          git push origin "$VERSION"
+          npm version $VERSION -f
+          npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
   release:
@@ -46,6 +43,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Get version number
+        id: version
+        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
       - name: Get the latest tag
         id: get_tag
         run: echo ::set-output name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1))
@@ -55,8 +55,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.version }}
-          release_name: ${{ steps.get_version.outputs.version }}
-          body: ${{ github.event.release.body }}
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: Release ${{ steps.version.outputs.version }}
+          body: |
+            Changes in this Release
+            - $(git log --pretty=format:'%s' -n 1)
           draft: false
           prerelease: false
