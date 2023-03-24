@@ -30,8 +30,6 @@ jobs:
           VERSION=$(node -p -e "require('./package.json').version")
           git config --global user.email "mohannad.otaibi@gmail.com"
           git config --global user.name "Mohannad Otaibi"
-          git tag "$VERSION"
-          git push origin "$VERSION"
           npm version $VERSION
           npm publish
         env:
