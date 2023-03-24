@@ -19,9 +19,13 @@ class SwarmappApi {
 	}
 
 	async initialize(){
-		const response = await this.getUser();
-		this.user = response.data.response.user;
-		this.log("hello");
+		try {
+			const response = await this.getUser();
+			this.user = response.data.response.user;
+			this.log("hello");
+		} catch (error) {
+			this.error(error)
+		}
 	}
 	
 	log(message){
