@@ -29,10 +29,10 @@ class SwarmappApi {
 	}
 	
 	log(message){
-		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this.user.id}) - `, message);
+		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
 	}
 	error(message){
-		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this.user.id}) - Error:`, message);
+		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
 	}
 
 	async login(username, password, client_id, client_secret) {
