@@ -145,8 +145,7 @@ class SwarmappApi {
 			const result = await axios.get(`${this.basePath}users/${USER_ID}`, { 'params': this.config });
 			return result;
 		} catch (error) {
-			this.error(error)
-			throw new Error(error);
+			throw new Error("Error getting user data, maybe an authentication error ?");
 			return;
 		} 
 	}
