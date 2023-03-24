@@ -32,7 +32,7 @@ jobs:
           git config --global user.name "Mohannad Otaibi"
           git tag "$VERSION"
           git push origin "$VERSION"
-          npm version $VERSION -f
+          npm version $VERSION
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
