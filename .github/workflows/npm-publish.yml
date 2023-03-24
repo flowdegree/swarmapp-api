@@ -9,11 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest    
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
       - run: npm ci
 
   publish-npm:
@@ -22,17 +21,12 @@ jobs:
     env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
       - run: npm ci
-      - run: |
-          VERSION=$(node -p -e "require('./package.json').version")
-          git config --global user.email "mohannad.otaibi@gmail.com"
-          git config --global user.name "Mohannad Otaibi"
-          npm publish
+      - run: npm publish
   release:
     needs: publish-npm
     name: Create Release
