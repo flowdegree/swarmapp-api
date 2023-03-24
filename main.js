@@ -24,7 +24,7 @@ class SwarmappApi {
 			this.user = response?.data?.response?.user;
 			this.log("hello");
 		} catch (error) {
-			this.error(error)
+			this.error("Could not authenticate user")
 		}
 	}
 	
@@ -146,7 +146,7 @@ class SwarmappApi {
 			return result;
 		} catch (error) {
 			this.error(error)
-			throw new Error(error); 
+			throw new Error(error);
 			return;
 		} 
 	}
