@@ -32,7 +32,7 @@ jobs:
           git config --global user.name "Mohannad Otaibi"
           npm publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   release:
     needs: publish-npm
     name: Create Release
