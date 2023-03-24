@@ -19,6 +19,8 @@ jobs:
   publish-npm:
     needs: build
     runs-on: ubuntu-latest
+    env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -31,8 +33,6 @@ jobs:
           git config --global user.email "mohannad.otaibi@gmail.com"
           git config --global user.name "Mohannad Otaibi"
           npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
   release:
     needs: publish-npm
     name: Create Release
