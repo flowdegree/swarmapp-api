@@ -28,6 +28,8 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm version patch -m "Bump version to %s [skip ci]"
+        env:
+          GITHUB_TOKEN: ${{secrets.npm_token}}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
