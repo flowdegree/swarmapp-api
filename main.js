@@ -134,24 +134,15 @@ class SwarmappApi {
 		});
 
 		try {
-			return this.getUser(options);
+			return this.getUser(options.USER_ID);
 		} catch (error) {
 			this.error(error)
 		}	
 	}
 
-	async getUser(options = {}) {
-		_.defaults(options, {
-			'user_id': 'self',
-		});
-
-		_.defaults(this.config, {
-			'USER_ID': 'self',
-			'limit': 100,
-		});
-
+	async getUser(USER_ID = 'self') {
 		try {
-			const result = await axios.get(this.basePath + 'users/' + options.user_id, { 'params': this.config });
+			const result = await axios.get(`${this.basePath}users/${USER_ID}`, { 'params': this.config });
 			return result;
 		} catch (error) {
 			this.error(error)
