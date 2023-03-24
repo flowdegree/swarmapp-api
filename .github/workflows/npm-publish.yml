@@ -34,6 +34,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
   release:
+    needs: publish-npm
     name: Create Release
     runs-on: ubuntu-latest
     steps:
