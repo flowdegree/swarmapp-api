@@ -27,6 +27,10 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: 'npm'
       - run: npm ci
+      - name: Set git identity
+        run: |
+          git config --global user.email "mohannad.otaibi@gmail.com"
+          git config --global user.name "Mohannad Otaibi"
       - run: npm version patch -m "Bump version to %s [skip ci]"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
