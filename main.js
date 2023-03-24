@@ -155,6 +155,7 @@ class SwarmappApi {
 			return result;
 		} catch (error) {
 			this.error(error)
+			throw new Error(error); 
 			return;
 		} 
 	}
