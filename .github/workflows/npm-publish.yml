@@ -27,11 +27,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
           cache: 'npm'
       - run: npm ci
-      - name: Set git identity
-        run: |
-          git config --global user.email "mohannad.otaibi@gmail.com"
-          git config --global user.name "Mohannad Otaibi"
-      - run: npm version patch -m "Bump version to %s [skip ci]"
+      - run: npm version minor -m "Bump version to %s [skip ci]"
+      - run: echo "::set-output name=version::$(jq -r .version package.json)"
+        id: get_version
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
       - run: npm publish
@@ -53,8 +51,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_tag.outputs.TAG }}
-          release_name: ${{ steps.get_tag.outputs.TAG }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: ${{ steps.get_version.outputs.version }}
           body: ${{ github.event.release.body }}
           draft: false
           prerelease: false
