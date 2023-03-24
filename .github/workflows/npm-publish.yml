@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - run: echo "$(jq '.publishConfig.registry = "https://npm.pkg.github.com"' package.json)" > package.json
       - run: npm publish
   release:
     needs: publish-npm
