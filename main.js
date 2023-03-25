@@ -31,6 +31,7 @@ class SwarmappApi {
 	log(message){
 		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
 	}
+
 	error(message){
 		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
 	}
@@ -289,7 +290,6 @@ class SwarmappApi {
             const succeeded = [];
 
             const recent = await this.getRecent({limit: limit});
-
             recent.forEach(async (checkin) => {
                 this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
                 if(checkin.like == false) {
