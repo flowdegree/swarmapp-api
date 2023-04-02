@@ -269,7 +269,7 @@ class SwarmappApi {
             //console.log(new_friend);
             this.log(`Relationship status is ${new_friend.relationship}`)
             if(new_friend.relationship == 'none'){
-                const result = await axios.post(this.basePath + 'users/' + user_id + '/request');
+                const result = await axios.post(this.basePath + 'users/' + user_id + '/request', querystring.stringify(this.config));
                 this.log(`Added ${new_friend?.firstName} ${new_friend?.lastName}`)
                 return result.data.response.user.relationship;
             }
