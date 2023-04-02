@@ -1,6 +1,6 @@
 {
   "name": "swarmapp-api",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "A javascript wrapper for swarmapp (foursquare) API",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.mjs",
