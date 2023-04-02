@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,            /* Concatenate & emit output to single file.*/
+    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
+    "declarationMap": true,
+    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
+    "incremental": true,            /* Enable incremental compilation */
+    "strict": true,                                      /* Enable all strict type-checking options. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    
+    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "module": "commonjs",                                /* Specify what module code is generated. */
+    "moduleResolution": "Node",
+    "outDir": "./lib/cjs",
+    "declarationDir": "./lib/cjs/types"
+  },
+  "include": [
+    "src"
+  ]
+}

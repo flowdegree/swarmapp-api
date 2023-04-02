@@ -2,9 +2,18 @@
   "name": "swarmapp-api",
   "version": "1.1.8",
   "description": "A javascript wrapper for swarmapp (foursquare) API",
-  "main": "main.js",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.mjs",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
-    "test": "echo \"Dummy Test\"",
+    "test": "jest --coverage",
+    "clean": "shx rm -rf lib",
+    "build": "npm run clean && npm run build:esm & npm run build:cjs",
+    "build:esm": "tsc && shx mv lib/esm/index.js lib/esm/index.mjs",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
+    "prepack": "npm run build",
     "mytest": "node ./test/test.js"
   },
   "repository": {
@@ -32,5 +41,25 @@
     "dotenv": "^16.0.3",
     "lodash": "^4.17.21",
     "querystring": "^0.2.1"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "shx": "^0.3.4",
+    "typescript": "^5.0.3"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/types/index.d.ts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/types/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
   }
 }

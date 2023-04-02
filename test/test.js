@@ -1,3 +1,5 @@
+// Will be converted to a jest unit tests
+
 require('dotenv').config()
 const swarmappapi = require('../main');
 
