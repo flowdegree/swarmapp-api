@@ -237,7 +237,7 @@ class SwarmappApi {
         const hereNow = checkin?.venue?.hereNow;
         this.log(`Adding hereNows from ${checkin.venue.name}`);
         this.log(`Females only setting is ${females_only}`)
-        this.log(`Found ${hereNow.count} people checked in classified under ${hereNow.groups.length()} groups`)
+        this.log(`Found ${hereNow.count} people checked in classified under ${hereNow.groups.length} groups`)
         
         if(hereNow.count > 0){
             for(const group of hereNow.groups){
