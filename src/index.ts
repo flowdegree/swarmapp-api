@@ -6,6 +6,8 @@ const querystring = require('querystring');
 // you may use a man in the middle proxy to detect your mobile app oauth token
 
 interface swarmConfig {
+    radius?: number;
+    near?: string | undefined;
     broadcast?: string;
     venueId?: string;
     oauth_token: string;
@@ -33,7 +35,7 @@ class SwarmappApi {
 			m: 'swarm',
 			v: '20221101',
 			// A random coordinate to use between calls imitating regular behavior
-			ll: '26.30' + this.between(340000000000, 499999999999) + ',50.1' + this.between(2870000000000, 3119999999999),
+			ll: '26.30' + this.between(340000000000, 499999999999) + ',50.1' + this.between(2870000000000, 3119999999999), //latitude/longitude
             altAcc: "30.000000",
             llAcc: "14.825392"
 		};
@@ -43,6 +45,10 @@ class SwarmappApi {
         }
 		this.initialize();
 	}
+
+    setLL(lat: string, lng: string){
+        this.config.ll = `${lat},${lng}`;
+    }
 
 	async initialize(){
 		try {
@@ -160,6 +166,16 @@ class SwarmappApi {
 		} 
 	}
 
+    async getVenue(venue_id: string) {
+		try {
+			const result = await axios.get(`${this.basePath}venues/${venue_id}/`, { 'params': this.config });
+			return result.data.response.venue;
+		} catch (error: any) {
+			throw new Error("Error getting venue data, maybe an authentication error ?");
+			return;
+		} 
+	}
+
 	async getCheckins(user_id: string = 'self', limit: number = 100, afterTimestamp?: string) {
 
         if(typeof afterTimestamp !== 'undefined'){
@@ -217,16 +233,54 @@ class SwarmappApi {
 		} 
 	}
 
+    // Get Trending Venues
+    async getTrending(limit: number = 50, ll?: string, near?: string, radius:number = 100000) {
+		this.config.limit = limit;
+        this.config.radius = radius;
+
+        if(typeof ll !== 'undefined'){
+            this.config.ll = ll;
+            // just make any call to mimic updating location
+            //await this.getUser(); 
+        }
+        else{
+            this.config.near = near;
+        }
+
+        // not sure how to mimic user location here
+        // it might not be needed
+
+		try {
+			const result = await axios.get(this.basePath + 'venues/trending', { 
+				params: this.config, 
+				paramsSerializer: (params: any) => { 
+					return querystring.stringify(params);
+				}
+			}); 
+	
+			return result.data.response.venues;
+		} 
+        catch (error: any) {
+			this.error(error)
+			return;
+		} 
+	}
+    
     // Checkin Functions
-	async checkIn(location_id: string, silent: boolean) {
+	async checkIn(venue_id: string, silent: boolean) {
         if(silent){
             this.config.broadcast = 'private';
         }
-        this.config.venueId = location_id;
+        this.config.venueId = venue_id;
+
+        // probably updates user LL
+        const venue_info = await this.getVenue(venue_id);
+        this.setLL(venue_info.location.lat, venue_info.location.lng);
 
 		try {
 			const result = await axios.post(this.basePath + 'checkins/add', querystring.stringify(this.config));
-			return result;
+            const checkin = result.data.response?.checkin;
+			return checkin;
 		} catch (error: any) {
 			this.error(error)
 			return;
