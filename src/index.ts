@@ -233,9 +233,15 @@ class SwarmappApi {
 		} 
 	}
 
-	async addHereNow(hereNow: any, females_only: boolean = true) {
+	async addHereNow(checkin: any, females_only: boolean = true) {
+        const hereNow = checkin?.venue?.hereNow;
+        this.log(`Adding hereNows from ${checkin.venue.name}`);
+        this.log(`Females only setting is ${females_only}`)
+        this.log(`Found ${hereNow.count} people checked in classified under ${hereNow.groups.length()} groups`)
+        
         if(hereNow.count > 0){
             for(const group of hereNow.groups){
+                this.log(`Found ${group.count} in group ${group.name}`)
                 if(group.count > 0){
                     for(const item of group.items){
                         if(females_only){
@@ -257,15 +263,15 @@ class SwarmappApi {
 
 	async addFriendByID(user_id: number) {
         try {
-            const new_friend = await this.getUser(user_id.toString());
-            console.log(new_friend);
-            
-            if(new_friend.data.response.user.relationship == 'none'){
+            const result = await this.getUser(user_id.toString());
+            const new_friend = result?.data?.response?.user;
+            this.log(`Checking ${new_friend?.firstName} ${new_friend?.lastName}`)
+            //console.log(new_friend);
+            this.log(`Relationship status is ${new_friend.relationship}`)
+            if(new_friend.relationship == 'none'){
                 const result = await axios.post(this.basePath + 'users/' + user_id + '/request');
+                this.log(`Added ${new_friend?.firstName} ${new_friend?.lastName}`)
                 return result.data.response.user.relationship;
-            }
-            else{
-                return new_friend.data.response.user.relationship;
             }
 		} 
         catch (error: any) {
