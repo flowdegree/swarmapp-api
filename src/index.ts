@@ -256,7 +256,7 @@ class SwarmappApi {
 				paramsSerializer: (params: any) => { 
 					return querystring.stringify(params);
 				}
-			}); 
+			});
 	
 			return result.data.response.venues;
 		} 

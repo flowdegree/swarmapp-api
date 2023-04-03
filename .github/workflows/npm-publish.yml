@@ -34,13 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Get version number
         id: version
-        run: echo "::set-output name=version::$(node -p -e "require('./package.json').version")"
+        run: echo name=version::$(node -p -e "require('./package.json').version") >>$GITHUB_OUTPUT
       - name: Get the latest tag
         id: get_tag
-        run: echo ::set-output name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1))
+        run: echo name=TAG::$(git describe --tags $(git rev-list --tags --max-count=1)) >>$GITHUB_OUTPUT
       - name: Set release notes
         id: set_release_notes
         run: |
