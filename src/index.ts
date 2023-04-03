@@ -5,22 +5,14 @@ const querystring = require('querystring');
 // some functions willl not work if the oauth_token was generated through an application created after 2021.
 // you may use a man in the middle proxy to detect your mobile app oauth token
 
-interface swarmConfig {
-    radius?: number;
-    near?: string | undefined;
-    broadcast?: string;
-    venueId?: string;
-    oauth_token: string;
-    m?: string; // application type
-    v: string;  // version number
-    ll: string;  //long lat,
-    altAcc: string;
-    llAcc: string;
-    alt?: string;
-    user_id?: string;
-    limit?: number;
-    afterTimeStamp?: string;
-}
+import {swarmConfig} from "./interfaces/swarmConfig"
+const venuesAPI = require('./services/venues')
+const usersAPI = require('./services/Users')
+const checkinsAPI = require('./services/checkins')
+const privateAPI = require('./services/private')
+const playAPI = require('./services/play')
+const { log, error } = require('../helpers/logging')(this);
+const { between } = require('./helpers/utilities');
 
 class SwarmappApi {
     config: swarmConfig;
@@ -29,15 +21,27 @@ class SwarmappApi {
     headers: any;
     flowId!: string;
 
+    log = log;
+    error = error;
+
+    venues = venuesAPI(this, axios);
+    users = usersAPI(this, axios);
+    checkins = checkinsAPI(this, axios);
+    play = playAPI(this, axios);
+    private = privateAPI(this, axios);
+
+    
 	constructor(oauth_token: string) {
 		this.config = {
 			oauth_token: oauth_token,
 			m: 'swarm',
 			v: '20221101',
 			// A random coordinate to use between calls imitating regular behavior
-			ll: '26.30' + this.between(340000000000, 499999999999) + ',50.1' + this.between(2870000000000, 3119999999999), //latitude/longitude
+			ll: '26.30' + between(340000000000, 499999999999) + ',50.1' + between(2870000000000, 3119999999999), //latitude/longitude
             altAcc: "30.000000",
-            llAcc: "14.825392"
+            llAcc: "14.825392",
+            floorLevel: "2146959360",
+            alt: "12.275661"
 		};
 		this.basePath = 'https://api.foursquare.com/v2/';
         this.headers = {
@@ -46,13 +50,9 @@ class SwarmappApi {
 		this.initialize();
 	}
 
-    setLL(lat: string, lng: string){
-        this.config.ll = `${lat},${lng}`;
-    }
-
 	async initialize(){
 		try {
-			const response = await this.getUser();
+			const response = await this.users().getUser();
 			this.user = response?.data?.response?.user;
 			this.log("hello");
 		} catch (error) {
@@ -60,14 +60,6 @@ class SwarmappApi {
 		}
 	}
 	
-	log(message: string){
-		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
-	}
-
-	error(message: string){
-		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
-	}
-
 	async initiatemultifactorlogin(username: string, password: string, client_id: string, client_secret: string) {
 		const params = {
 			client_id: client_id,
@@ -106,270 +98,6 @@ class SwarmappApi {
 		}
 	}
 
-	// Get Commands
-	// TODO: requires testing, does not accept non swarmapp (mobile) oauth tokens
-	async getFriends(user_id: string = 'self') {
-        this.config.user_id = user_id;
-		try {
-			const result = await axios.get(this.basePath + 'users/' + user_id + '/friends', { 'params': this.config });
-			return result.data.response.friends;
-		} catch (error: any) {
-			this.error(error)
-		}  
-	}
-
-	// TODO: works only for foursquare client, requires more testing
-	async getFollowings(user_id: string = 'self') {
-		this.config.m = 'foursquare';
-        this.config.user_id = user_id;
-
-		try {
-			const result = await axios.get(this.basePath + 'users/' + user_id + '/following', { 'params': this.config });
-			return result.data.response.following;
-		} catch (error: any) {
-			this.error(error)
-		}  
-	}
-
-	// TODO: works only for foursquare client, requires more testing
-	async getFollowers(user_id: string = 'self') {
-		this.config.m = 'foursquare';
-        this.config.user_id = user_id;
-
-		try {
-			const result = await axios.get(this.basePath + 'users/' + user_id + '/followers', { 'params': this.config });
-			return result.data.response.followers;
-		} catch (error: any) {
-			this.error(error)
-		}  
-	}
-  
-    // TODO: should get user, then get checkins and location of last check-in
-	getLastSeen(user_id: string = 'self', limit: number = 100) {
-        this.config.user_id = user_id;
-        this.config.limit = limit;
-		
-		try {    
-			return this.getUser(user_id);
-		} catch (error: any) {
-			this.error(error)
-		}	
-	}
-
-	async getUser(user_id: string = 'self') {
-		try {
-			const result = await axios.get(`${this.basePath}users/${user_id}`, { 'params': this.config });
-			return result;
-		} catch (error: any) {
-			throw new Error("Error getting user data, maybe an authentication error ?");
-			return;
-		} 
-	}
-
-    async getVenue(venue_id: string) {
-		try {
-			const result = await axios.get(`${this.basePath}venues/${venue_id}/`, { 'params': this.config });
-			return result.data.response.venue;
-		} catch (error: any) {
-			throw new Error("Error getting venue data, maybe an authentication error ?");
-			return;
-		} 
-	}
-
-	async getCheckins(user_id: string = 'self', limit: number = 100, afterTimestamp?: string) {
-
-        if(typeof afterTimestamp !== 'undefined'){
-            this.config.afterTimeStamp = afterTimestamp;
-        }
-        this.config.user_id = user_id;
-        this.config.limit = limit;
-        
-		try {
-			const result = await axios.get(this.basePath + 'users/' + user_id + '/checkins', { 'params': this.config });
-			return result;
-		} catch (error: any) {
-			this.error(error)
-			return;
-		}        
-	}
-
-    // not sure if it is working
-	async getGeos(user_id: string = 'self'){
-		this.config.user_id = user_id;
-
-		delete this.config.afterTimeStamp;
-
-		try {
-			const response = await axios.get(this.basePath + '/users/' + user_id + '/map', { 'params': this.config });
-			return response.data.response;
-		} catch (error: any) {
-			this.error(error)
-		}
-	}
-
-	// returns user timeline after timestamp
-	async getRecent(limit: number = 100, ll?: string) {
-       
-		this.config.limit = limit;
-        this.config.afterTimeStamp = (Math.floor(Date.now() / 1000) - (1 * 24 * 60 * 60)).toString();
-
-        if(typeof ll !== 'undefined'){
-            this.log('found location');
-			this.config.ll = ll;
-        }
-
-		try {
-			const result = await axios.get(this.basePath + 'checkins/recent', { 
-				params: this.config, 
-				paramsSerializer: (params: any) => { 
-					return querystring.stringify(params);
-				}
-			}); 
-	
-			return result.data.response.recent;
-		} catch (error: any) {
-			this.error(error)
-			return;
-		} 
-	}
-
-    // Get Trending Venues
-    async getTrending(limit: number = 50, ll?: string, near?: string, radius:number = 100000) {
-		this.config.limit = limit;
-        this.config.radius = radius;
-
-        if(typeof ll !== 'undefined'){
-            this.config.ll = ll;
-            // just make any call to mimic updating location
-            //await this.getUser(); 
-        }
-        else{
-            this.config.near = near;
-        }
-
-        // not sure how to mimic user location here
-        // it might not be needed
-
-		try {
-			const result = await axios.get(this.basePath + 'venues/trending', { 
-				params: this.config, 
-				paramsSerializer: (params: any) => { 
-					return querystring.stringify(params);
-				}
-			});
-	
-			return result.data.response.venues;
-		} 
-        catch (error: any) {
-			this.error(error)
-			return;
-		} 
-	}
-    
-    // Checkin Functions
-	async checkIn(venue_id: string, silent: boolean) {
-        if(silent){
-            this.config.broadcast = 'private';
-        }
-        this.config.venueId = venue_id;
-
-        // probably updates user LL
-        const venue_info = await this.getVenue(venue_id);
-        this.setLL(venue_info.location.lat, venue_info.location.lng);
-
-		try {
-			const result = await axios.post(this.basePath + 'checkins/add', querystring.stringify(this.config));
-            const checkin = result.data.response?.checkin;
-			return checkin;
-		} catch (error: any) {
-			this.error(error)
-			return;
-		} 
-	}
-
-	async addHereNow(checkin: any, females_only: boolean = true) {
-        const hereNow = checkin?.venue?.hereNow;
-        this.log(`Adding hereNows from ${checkin.venue.name}`);
-        this.log(`Females only setting is ${females_only}`)
-        this.log(`Found ${hereNow.count} people checked in classified under ${hereNow.groups.length} groups`)
-        
-        if(hereNow.count > 0){
-            for(const group of hereNow.groups){
-                this.log(`Found ${group.count} in group ${group.name}`)
-                if(group.count > 0){
-                    for(const item of group.items){
-                        if(females_only){
-                            if(item.user?.gender == 'female'){
-                                await this.addFriendByID(item.user.id);
-                            }
-                        }
-                        else{
-                            await this.addFriendByID(item.user.id);
-                        }
-                    } 
-                }
-            }
-        }
-        else{
-            return 'no one is here';
-        }
-	}
-
-	async addFriendByID(user_id: number) {
-        try {
-            const result = await this.getUser(user_id.toString());
-            const new_friend = result?.data?.response?.user;
-            this.log(`Checking ${new_friend?.firstName} ${new_friend?.lastName}`)
-            //console.log(new_friend);
-            this.log(`Relationship status is ${new_friend.relationship}`)
-            if(new_friend.relationship == 'none'){
-                const result = await axios.post(this.basePath + 'users/' + user_id + '/request', querystring.stringify(this.config));
-                this.log(`Added ${new_friend?.firstName} ${new_friend?.lastName}`)
-                return result.data.response.user.relationship;
-            }
-		} 
-        catch (error: any) {
-			this.error(error)
-			return;
-		} 
-	}
-
-    // Like Functions
-	async likeCheckin(checkin_id: string) {
-		try {
-			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
-			return result;
-		} catch (error: any) {
-			this.error(error)
-			return;
-		}	
-	}
-
-	async likeUnliked(limit: number = 40) {
-        try {
-            const succeeded: any[] = [];
-
-            const recent = await this.getRecent(limit);
-
-            for(const checkin of recent){
-                this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
-                if(checkin.like == false) {
-                    const liked_result = await this.likeCheckin(checkin.id);
-                    this.log(`liked ${checkin.id}`);
-                    succeeded.push(liked_result);
-                }
-            }
-
-            return succeeded;
-        } catch (error: any) {
-            this.error(error);
-        }	
-	}
-
-    // Utility functions
-	between(min: number, max: number) {
-		return Math.floor(Math.random() * (max - min) + min);
-	}
 }
 
 module.exports = SwarmappApi;
