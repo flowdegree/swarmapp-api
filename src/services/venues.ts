@@ -1,6 +1,4 @@
-const querystring = require('querystring');
-
-module.exports = (self: any, axios: any) => () => ({
+module.exports = (self: any, axios: any, querystring: any) => () => ({
     async getVenue(venue_id: string) {
 		try {
 			const result = await axios.get(`${self.basePath}venues/${venue_id}/`, { 'params': self.config });

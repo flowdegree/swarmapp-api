@@ -1,4 +1,4 @@
-module.exports = (self: any) => ({
+module.exports = () => ({
     createLatLngString(lat: string, lng: string){
         return `${lat},${lng}`;
     },

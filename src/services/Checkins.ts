@@ -1,6 +1,6 @@
-const { createLatLngString } = require('../helpers/utilities');
+const createLatLngString = require('../helpers/utilities')().createLatLngString;
 
-module.exports = (self: any, axios: any) => () => ({
+module.exports = (self: any, axios: any, querystring: any) => () => ({
 
     async getCheckins(user_id: string = 'self', limit: number = 100, afterTimestamp?: string) {
 
@@ -21,7 +21,7 @@ module.exports = (self: any, axios: any) => () => ({
 
     // returns user timeline after timestamp
 	async getRecent(limit: number = 100, ll?: string) {
-       
+		
 		self.config.limit = limit;
         self.config.afterTimeStamp = (Math.floor(Date.now() / 1000) - (1 * 24 * 60 * 60)).toString();
 
@@ -53,7 +53,7 @@ module.exports = (self: any, axios: any) => () => ({
         self.config.venueId = venue_id;
 
         // probably updates user LL
-        const venue_info = await self.venues.getVenue(venue_id);
+        const venue_info = await self.venues().getVenue(venue_id);
         self.config.ll = createLatLngString(venue_info.location.lat, venue_info.location.lng);
 
 		try {

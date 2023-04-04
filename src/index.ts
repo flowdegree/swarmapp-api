@@ -11,26 +11,25 @@ const usersAPI = require('./services/Users')
 const checkinsAPI = require('./services/checkins')
 const privateAPI = require('./services/private')
 const playAPI = require('./services/play')
-const { log, error } = require('../helpers/logging')(this);
-const { between } = require('./helpers/utilities');
+const between = require('./helpers/utilities')().between;
+const logger = require('./helpers/logging');
 
 class SwarmappApi {
+    
+    
     config: swarmConfig;
     basePath: string;
     user: any;
     headers: any;
     flowId!: string;
 
-    log = log;
-    error = error;
-
-    venues = venuesAPI(this, axios);
-    users = usersAPI(this, axios);
-    checkins = checkinsAPI(this, axios);
+    venues = venuesAPI(this, axios, querystring);
+    users = usersAPI(this, axios, querystring);
+    checkins = checkinsAPI(this, axios, querystring);
     play = playAPI(this, axios);
     private = privateAPI(this, axios);
+    logger = logger(this);
 
-    
 	constructor(oauth_token: string) {
 		this.config = {
 			oauth_token: oauth_token,
@@ -47,16 +46,18 @@ class SwarmappApi {
         this.headers = {
             'User-Agent': 'com.foursquare.robin.ios.phone:20230316.2230.52:20221101:iOS 16.1.1:iPhone13,4'
         }
+        
 		this.initialize();
 	}
 
 	async initialize(){
 		try {
 			const response = await this.users().getUser();
-			this.user = response?.data?.response?.user;
-			this.log("hello");
+            console.log(response?.data?.response?.user);
+			this.user = response?.data?.response?.user.id;
+			this.logger.log("hello");
 		} catch (error) {
-			this.error("Could not authenticate user")
+			this.logger.error("Could not authenticate user")
 		}
 	}
 	
@@ -74,7 +75,7 @@ class SwarmappApi {
 			
 			return response.data.access_token;
 		} catch (error: any) {
-			this.error(error)
+			this.logger.error(error)
 			return;
 		}
 	}
@@ -93,7 +94,7 @@ class SwarmappApi {
 			
 			return response.data.access_token;
 		} catch (error: any) {
-			this.error(error)
+			this.logger.error(error)
 			return;
 		}
 	}

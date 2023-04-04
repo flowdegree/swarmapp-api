@@ -1,6 +1,6 @@
 
 
-module.exports = (self: any, axios: any) => () => ({
+module.exports = (self: any, axios: any, querystring: any) => () => ({
     // TODO: requires testing, does not accept non swarmapp (mobile) oauth tokens
 	async getFriends(user_id: string = 'self') {
         self.config.user_id = user_id;
