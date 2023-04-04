@@ -1,4 +1,4 @@
-export interface swarmConfig {
+var config:   {
     radius?: number;
     near?: string | undefined;
     broadcast?: string;
@@ -15,3 +15,8 @@ export interface swarmConfig {
     afterTimeStamp?: string;
     floorLevel?: string;
 }
+
+var basePath: string;
+var user: any;
+var headers: any;
+var flowId!: string;
