@@ -327,6 +327,42 @@ class SwarmappApi {
 		}
     }
 
+	async register_device(){
+		const params = {
+			limitAdsTracking:	'1',
+			carrier:	'stc',
+			hasWatch:	'1',
+			csid:	'1242',
+			alt:	'11.791945',
+			llAcc:	'14.825392',
+			otherDeviceIds:	'6054750ee01fbc1e3492a745,61187d1fceb2110097a0fc02',
+			ll:	'21.530136,39.172863',
+			altAcc:	'17.547791',
+			locationAuthorizationStatus:	'authorizedwheninuse',
+			token:	'ec0718c5d042b63587c14d461bb077d1262811456c4799558e1df2616f02cc9a',
+			oauth_token:	'DW233H4JWJZ0E14QU01LFWUZL4RDQPLAF10BAJEI2FTWNOKH',
+			iosSettings:	'0',
+			m:	'swarm',
+			floorLevel:	'2146959360',
+			measurementSystem:	'metric',
+			uniqueDevice:	'6054750ee01fbc1e3492a745',
+			v:	'20221101',
+			backgroundRefreshStatus:	'available',
+		}
+
+		try {
+			const result = await axios.post(this.basePath + '/private/registerdevice ', querystring.stringify(params));
+            const registeration = result.data.response?.checkin;
+			return registeration;
+		} catch (error: any) {
+			this.error(error)
+			return;
+		} 
+
+
+		
+	}
+
 	async addHereNow(checkin: any, females_only: boolean = true) {
         const hereNow = checkin?.venue?.hereNow;
         this.log(`Adding hereNows from ${checkin.venue.name}`);
