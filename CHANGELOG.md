@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.5.0
+
+### Minor Changes
+
+- 6ee82aa: Fix Constructor
+
 ## 2.4.1
 
 ### Patch Changes
