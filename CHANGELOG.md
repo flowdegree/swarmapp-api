@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.5.4
+
+### Patch Changes
+
+- 8cc2300: Fix package json main entries
+
 ## 2.5.3
 
 ### Patch Changes
