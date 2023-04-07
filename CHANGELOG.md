@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.5.3
+
+### Patch Changes
+
+- 7e1a688: fix changeset
+
 ## 2.5.2
 
 ### Patch Changes
