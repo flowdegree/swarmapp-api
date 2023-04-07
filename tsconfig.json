@@ -11,7 +11,7 @@
     "lib": ["ES6", "DOM"],
     "target": "es2020",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "commonjs",                                /* Specify what module code is generated. */
-    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "typeRoots": ["./node_modules/@types", "./src/esm/types"],
     "outDir": "./lib/esm",
     "declarationDir": "./lib/esm/types"
   },
