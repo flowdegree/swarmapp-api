@@ -75,8 +75,9 @@ class SwarmappApi {
 		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
 	}
 
-	error(message: string){
+	error(message: any){
 		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
+		console.error(message);
 	}
 
 	async initiatemultifactorlogin(username: string, password: string, client_id: string, client_secret: string) {
