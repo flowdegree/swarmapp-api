@@ -1,7 +1,7 @@
 // Will be converted to a jest unit tests
 
 require('dotenv').config()
-const swarmappapi = require('../legacy_main');
+const swarmappapi = require('./legacy_main');
 
 const swarm = new swarmappapi({ api_key: process.env.token });
 

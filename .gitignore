@@ -131,3 +131,4 @@ node_modules/
 coverage/
 lib
 test/mytest
+dist/
