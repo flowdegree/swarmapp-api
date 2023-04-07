@@ -28,37 +28,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-
-  release:
-    needs: build
-    name: Create Release
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Get version number
-        id: version
-        run: echo version=$(node -p -e "require('./package.json').version") >> $GITHUB_OUTPUT
-      - name: Get the latest tag
-        id: get_tag
-        run: echo TAG=$(git describe --tags $(git rev-list --tags --max-count=1)) >> $GITHUB_OUTPUT
-      - name: Set release notes
-        id: set_release_notes
-        run: |
-          #!/bin/bash
-          release_notes=$(git log --pretty=format:'%s' -n 1)
-          echo "RELEASE_NOTES=$release_notes" >> $GITHUB_ENV
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version.outputs.version }}
-          release_name: Release ${{ steps.version.outputs.version }}
-          body: |
-            Changes in this Release
-            - ${{ env.RELEASE_NOTES }}
-          draft: false
-          prerelease: false

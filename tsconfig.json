@@ -7,9 +7,7 @@
     "strict": true,
     "skipLibCheck": true, 
     "noUncheckedIndexedAccess": true,
-    "noEmit": true,
-
-    "outDir": "./lib/",
+    "noEmit": true
   },
   "include": ["src"]
 }

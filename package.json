@@ -7,9 +7,9 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
-    "clean": "shx rm -rf lib",
+    "clean": "shx rm -rf lib && shx rm -rf dist",
     "lint": "tsc",
-    "build": "pnpm run clean && tsup src/index.ts --format cjs,esm --dts"
+    "build": "pnpm run clean && pnpm run clean && tsup src/index.ts --format cjs,esm --dts"
   },
   "repository": {
     "type": "git",
