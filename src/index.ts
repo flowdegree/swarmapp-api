@@ -81,6 +81,7 @@ class SwarmappApi {
 
 	async initiatemultifactorlogin(username: string, password: string, client_id: string, client_secret: string) {
 		const params = {
+			...this.config,
 			client_id: client_id,
 			client_secret: client_secret,
 			username: username,
@@ -88,7 +89,7 @@ class SwarmappApi {
 		  };
 
 		try {
-			const response = await axios.post(this.basePath + '/private/initiatemultifactorlogin', null, { params });
+			const response = await axios.post(this.basePath + 'private/initiatemultifactorlogin', querystring.stringify(params));
 			this.flowId = response.data.flowId;
 			
 			return response.data;
@@ -100,6 +101,7 @@ class SwarmappApi {
 
     async completemultifactorlogin(code: string, client_id: string, client_secret: string) {
 		const params = {
+			...this.config,
 			client_id: client_id,
 			client_secret: client_secret,
 			code: code,
@@ -107,7 +109,7 @@ class SwarmappApi {
 		  };
 
 		try {
-			const response = await axios.post(this.basePath + '/private/completemultifactorlogin', null, { params });
+			const response = await axios.post(this.basePath + 'private/completemultifactorlogin', querystring.stringify(params));
 			this.config.oauth_token = response.data.oauth_token;
 			
 			return response.data.access_token;
