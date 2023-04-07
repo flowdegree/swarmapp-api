@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.5.2
+
+### Patch Changes
+
+- 2a77aca: Add release script
+
 ## 2.5.1
 
 ### Patch Changes
