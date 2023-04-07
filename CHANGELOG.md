@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.4.1
+
+### Patch Changes
+
+- 47c432a: Update tsconfig
+
 ## 2.4.0
 
 ### Minor Changes
