@@ -91,7 +91,7 @@ class SwarmappApi {
 			const response = await axios.post(this.basePath + '/private/initiatemultifactorlogin', null, { params });
 			this.flowId = response.data.flowId;
 			
-			return response.data.access_token;
+			return response.data;
 		} catch (error: any) {
 			this.error(error)
 			return;
