@@ -2,9 +2,9 @@
   "name": "swarmapp-api",
   "version": "2.5.3",
   "description": "A javascript wrapper for swarmapp (foursquare) API",
-  "main": "lib/index.js",
-  "module": "lib/index.mjs",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
     "release": "pnpm run build && changeset publish",
