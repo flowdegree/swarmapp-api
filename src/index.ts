@@ -10,7 +10,7 @@ type swarmConfig =   {
     near?: string | undefined;
     broadcast?: string;
     venueId?: string;
-    oauth_token: string;
+    oauth_token?: string;
     m?: string; // application type
     v: string;  // version number
     ll: string;  //long lat,
@@ -30,9 +30,10 @@ class SwarmappApi {
 	user: any;
 	flowId?: string;
 
-	constructor(oauth_token: string) {
+	constructor();
+
+	constructor(oauth_token?: string) {
 		this.config = {
-			oauth_token: oauth_token,
 			m: 'swarm',
 			v: '20221101',
 			// A random coordinate to use between calls imitating regular behavior
@@ -42,6 +43,11 @@ class SwarmappApi {
             floorLevel: "2146959360",
             alt: "12.275661"
 		};
+		
+		if(oauth_token){
+			this.config.oauth_token = oauth_token;
+		}
+
 		this.basePath = 'https://api.foursquare.com/v2/';
         this.headers = {
             'User-Agent': 'com.foursquare.robin.ios.phone:20230316.2230.52:20221101:iOS 16.1.1:iPhone13,4'
