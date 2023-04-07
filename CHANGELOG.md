@@ -1,5 +1,13 @@
 # swarmapp-api
 
+## 2.5.1
+
+### Patch Changes
+
+- 4cc7dee: Fix CI/CD
+
+  Just fixing CI CD
+
 ## 2.5.0
 
 ### Minor Changes
