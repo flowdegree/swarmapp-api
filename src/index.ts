@@ -44,16 +44,15 @@ class SwarmappApi {
             alt: "12.275661"
 		};
 		
-		if(oauth_token){
-			this.config.oauth_token = oauth_token;
-		}
-
 		this.basePath = 'https://api.foursquare.com/v2/';
         this.headers = {
             'User-Agent': 'com.foursquare.robin.ios.phone:20230316.2230.52:20221101:iOS 16.1.1:iPhone13,4'
         }
 
-		this.initialize();
+		if(oauth_token){
+			this.config.oauth_token = oauth_token;
+			this.initialize();
+		}
 	}
 
 	async initialize(){
