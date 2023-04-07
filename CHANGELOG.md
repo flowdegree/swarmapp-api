@@ -1,5 +1,20 @@
 # swarmapp-api
 
+## 2.6.0
+
+### Minor Changes
+
+- b297060: Fix authetication
+
+  fix:
+
+  - initiatemultifactorlogin
+  - completemultifactorlogin
+
+### Patch Changes
+
+- 6a5ed8e: fix lockfile
+
 ## 2.5.4
 
 ### Patch Changes
