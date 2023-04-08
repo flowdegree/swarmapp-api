@@ -1,5 +1,13 @@
 # swarmapp-api
 
+## 2.7.0
+
+### Minor Changes
+
+- d921ad1: # Fix error messages
+
+  Adjust error messages to return API error messages
+
 ## 2.6.0
 
 ### Minor Changes
