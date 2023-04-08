@@ -66,19 +66,6 @@ class SwarmappApi {
 		}
 	}
 
-    getLL(){
-        return this.config.ll;
-    }
-	
-	log(message: string){
-		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
-	}
-
-	error(message: any){
-		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
-		console.error(message);
-	}
-
 	async initiatemultifactorlogin(username: string, password: string, client_id: string, client_secret: string) {
 		const params = {
 			...this.config,
@@ -94,7 +81,7 @@ class SwarmappApi {
 			
 			return response.data;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		}
 	}
@@ -114,7 +101,7 @@ class SwarmappApi {
 			
 			return response.data.access_token;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		}
 	}
@@ -127,7 +114,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + user_id + '/friends', { 'params': this.config });
 			return result.data.response.friends;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 		}  
 	}
 
@@ -140,7 +127,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + user_id + '/following', { 'params': this.config });
 			return result.data.response.following;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 		}  
 	}
 
@@ -153,7 +140,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + user_id + '/followers', { 'params': this.config });
 			return result.data.response.followers;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 		}  
 	}
   
@@ -165,7 +152,7 @@ class SwarmappApi {
 		try {    
 			return this.getUser(user_id);
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 		}	
 	}
 
@@ -201,7 +188,7 @@ class SwarmappApi {
 			const result = await axios.get(this.basePath + 'users/' + user_id + '/checkins', { 'params': this.config });
 			return result;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		}        
 	}
@@ -216,7 +203,7 @@ class SwarmappApi {
 			const response = await axios.get(this.basePath + '/users/' + user_id + '/map', { 'params': this.config });
 			return response.data.response;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 		}
 	}
 
@@ -241,7 +228,7 @@ class SwarmappApi {
 	
 			return result.data.response.recent;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		} 
 	}
@@ -274,7 +261,7 @@ class SwarmappApi {
 			return result.data.response.venues;
 		} 
         catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		} 
 	}
@@ -295,7 +282,7 @@ class SwarmappApi {
             const checkin = result.data.response?.checkin;
 			return checkin;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		} 
 	}
@@ -330,7 +317,7 @@ class SwarmappApi {
             });
 			return result;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		}
     }
@@ -363,7 +350,7 @@ class SwarmappApi {
             const registeration = result.data.response?.checkin;
 			return registeration;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		} 
 
@@ -413,7 +400,7 @@ class SwarmappApi {
             }
 		} 
         catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		} 
 	}
@@ -438,7 +425,7 @@ class SwarmappApi {
 			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
 			return result;
 		} catch (error: any) {
-			this.error(error)
+			this.error(error.response.data)
 			return;
 		}	
 	}
@@ -460,7 +447,7 @@ class SwarmappApi {
 
             return succeeded;
         } catch (error: any) {
-            this.error(error);
+            this.error(error.response.data)
         }	
 	}
 
@@ -472,6 +459,19 @@ class SwarmappApi {
     createLatLngString(lat: string, lng: string){
         return `${lat},${lng}`;
     }
+
+	getLL(){
+        return this.config.ll;
+    }
+	
+	log(message: string){
+		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
+	}
+
+	error(message: any){
+		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
+		//console.error(message);
+	}
 }
 
 module.exports = SwarmappApi;
