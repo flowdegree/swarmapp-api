@@ -470,7 +470,7 @@ class SwarmappApi {
 
 	error(message: any){
 		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
-		return message;
+		throw new Error(message);
 		//console.error(message);
 	}
 }
