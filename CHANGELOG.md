@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.1
+
+### Patch Changes
+
+- 3a43283: Return the error
+
 ## 2.7.0
 
 ### Minor Changes
