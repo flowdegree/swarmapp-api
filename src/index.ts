@@ -465,13 +465,21 @@ class SwarmappApi {
     }
 	
 	log(message: string){
-		console.log(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - `, message);
+		let _prefix = typeof this?.user?.firstName != 'undefined' ? `${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error: ` : ""
+		console.log(`${_prefix}) `, message);
 	}
 
-	error(message: any){
-		console.error(`${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error:`, message);
-		throw new Error(message);
-		//console.error(message);
+	error(error: any){
+		let _prefix = typeof this?.user?.firstName != 'undefined' ? `${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error: ` : ""
+		switch (error?.meta?.code) {
+			case 401:
+				throw new Error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
+				break;
+		
+			default:
+				throw new Error(JSON.stringify(`${_prefix} ${error}`, null, 4))
+				break;
+		}
 	}
 }
 
