@@ -60,7 +60,7 @@ class SwarmappApi {
 		try {
 			const response = await this.getUser();
 			this.user = response?.data?.response?.user;
-			this.log("hello");
+			this.log("working ✅");
 		} 
         catch (error) {
 			this.error("Could not authenticate user")
@@ -445,6 +445,9 @@ class SwarmappApi {
                     this.log(`liked ${checkin.id}`);
                     succeeded.push(liked_result);
                 }
+				else{
+					failed.push(checkin.id)
+				}
             }
 
             return { succeeded: succeeded, failed: failed };
