@@ -52,7 +52,7 @@ class SwarmappApi {
 		if(oauth_token){
 			this.config.oauth_token = oauth_token;
 			// initialize might not be needed
-			this.initialize();
+			//this.initialize();
 		}
 	}
 
