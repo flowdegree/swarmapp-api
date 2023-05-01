@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.5
+
+### Patch Changes
+
+- adjust logging and constructor
+
 ## 2.7.4
 
 ### Patch Changes
