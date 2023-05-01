@@ -433,11 +433,12 @@ class SwarmappApi {
 	async likeUnliked(limit: number = 40) {
         try {
             const succeeded: any[] = [];
+			const failed: any[] = [];
 
             const recent = await this.getRecent(limit);
 
             for(const checkin of recent){
-                this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
+                // this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
                 if(checkin.like == false) {
                     const liked_result = await this.likeCheckin(checkin.id);
                     this.log(`liked ${checkin.id}`);
@@ -445,7 +446,7 @@ class SwarmappApi {
                 }
             }
 
-            return succeeded;
+            return { succeeded: succeeded, failed: failed };
         } catch (error: any) {
             this.error(error.response.data)
         }	
