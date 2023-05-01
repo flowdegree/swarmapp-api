@@ -51,6 +51,7 @@ class SwarmappApi {
 
 		if(oauth_token){
 			this.config.oauth_token = oauth_token;
+			// initialize might not be needed
 			this.initialize();
 		}
 	}
@@ -466,12 +467,15 @@ class SwarmappApi {
     }
 	
 	log(message: string){
-		let _prefix = typeof this?.user?.firstName != 'undefined' ? `${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error: ` : ""
+		let _prefix = `${new Date().toLocaleString()} - `;
+		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : this?.user?.id
 		console.log(`${_prefix}) `, message);
 	}
 
 	error(error: any){
-		let _prefix = typeof this?.user?.firstName != 'undefined' ? `${new Date().toLocaleString()} - ${this?.user?.firstName}(${this?.user?.id}) - Error: ` : ""
+		let _prefix = `${new Date().toLocaleString()} - `;
+		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : this?.user?.id
+		_prefix += ' - Error: '
 		switch (error?.meta?.code) {
 			case 401:
 				throw new Error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
