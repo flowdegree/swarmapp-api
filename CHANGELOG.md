@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.9
+
+### Patch Changes
+
+- log instead of throw new error
+
 ## 2.7.8
 
 ### Patch Changes

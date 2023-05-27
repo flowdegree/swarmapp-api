@@ -481,12 +481,10 @@ class SwarmappApi {
 		
 		switch (error?.meta?.code) {
 			case 401:
-				throw new Error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
-				break;
+				console.log(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
 		
 			default:
-				throw new Error(JSON.stringify(`${_prefix} ${error}`, null, 4))
-				break;
+				console.log(JSON.stringify(`${_prefix} ${error}`, null, 4))
 		}
 	}
 }
