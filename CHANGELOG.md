@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.8
+
+### Patch Changes
+
+- fix error still
+
 ## 2.7.7
 
 ### Patch Changes

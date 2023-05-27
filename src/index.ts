@@ -45,14 +45,13 @@ class SwarmappApi {
 		};
 		
 		this.basePath = 'https://api.foursquare.com/v2/';
+
         this.headers = {
             'User-Agent': 'com.foursquare.robin.ios.phone:20230316.2230.52:20221101:iOS 16.1.1:iPhone13,4'
         }
 
 		if(oauth_token){
 			this.config.oauth_token = oauth_token;
-			// initialize might not be needed
-			//this.initialize();
 		}
 	}
 
@@ -477,7 +476,7 @@ class SwarmappApi {
 
 	error(error: any){
 		let _prefix = `${new Date().toLocaleString()} - `;
-		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : this.config.oauth_token
+		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : "unknown user"
 		_prefix += ' - Error: '
 		
 		switch (error?.meta?.code) {
