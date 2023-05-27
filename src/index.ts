@@ -439,7 +439,7 @@ class SwarmappApi {
             const recent = await this.getRecent(limit);
 
             for(const checkin of recent){
-                // this.log(`Checkin ${checkin.id} liked before = ${checkin.like}`);
+                
                 if(checkin.like == false) {
                     const liked_result = await this.likeCheckin(checkin.id);
                     this.log(`liked ${checkin.id}`);
@@ -477,8 +477,9 @@ class SwarmappApi {
 
 	error(error: any){
 		let _prefix = `${new Date().toLocaleString()} - `;
-		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : this?.user?.id
+		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : this.config.oauth_token
 		_prefix += ' - Error: '
+		
 		switch (error?.meta?.code) {
 			case 401:
 				throw new Error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)

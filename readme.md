@@ -67,6 +67,13 @@ Let's say you want to retrieve the list of check-ins for a particular user on Sw
 
 I will be glad ♥ (for the time-being) to add the feature you are missing, just open an issue.
 
+## Updates
+
+- `pnpm changeset`
+- `pnpm changeset version`
+- commit
+- push
+
 ## Contributing
 
 We welcome contributions from the community! To contribute to the SwarmApp API, follow these steps:

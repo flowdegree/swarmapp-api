@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.7
+
+### Patch Changes
+
+- Fixing prefix of error logging
+
 ## 2.7.6
 
 ### Patch Changes
