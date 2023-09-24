@@ -468,9 +468,7 @@ export class SwarmappApi {
 		  }
 	}
 
-	getLL() {
-		return this.config.ll;
-	}
+	getLL() { return this.config.ll; }
 
 	log(message: string) {
 		let _prefix = `${new Date().toLocaleString()} - `;
