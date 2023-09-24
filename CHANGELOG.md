@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.8.1
+
+### Patch Changes
+
+- - return promises on some functions
+
 ## 2.8.0
 
 ### Minor Changes

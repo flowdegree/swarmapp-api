@@ -58,13 +58,15 @@ export class SwarmappApi {
 		}
 	}
 
-	async initialize() {
+	async initialize(): Promise<boolean> {
 		try {
 			const response = await this.getUser();
 			this.user = response?.data?.response?.user;
+			return true;
 		}
 		catch (error) {
 			this.error("Could not authenticate user")
+			return false;
 		}
 	}
 
@@ -110,18 +112,19 @@ export class SwarmappApi {
 
 	// Get Commands
 	// TODO: requires testing, does not accept non swarmapp (mobile) oauth tokens
-	async getFriends(user_id: string = 'self') {
+	async getFriends(user_id: string = 'self'): Promise<any[] | null> {
 		this.config.user_id = user_id;
 		try {
 			const result = await axios.get(this.basePath + 'users/' + user_id + '/friends', { 'params': this.config });
 			return result.data.response.friends;
 		} catch (error: any) {
 			this.error(error.response.data)
+			return null;
 		}
 	}
 
 	// TODO: works only for foursquare client, requires more testing
-	async getFollowings(user_id: string = 'self') {
+	async getFollowings(user_id: string = 'self'): Promise<any[] | null> {
 		this.config.m = 'foursquare';
 		this.config.user_id = user_id;
 
@@ -130,6 +133,7 @@ export class SwarmappApi {
 			return result.data.response.following;
 		} catch (error: any) {
 			this.error(error.response.data)
+			return null;
 		}
 	}
 
