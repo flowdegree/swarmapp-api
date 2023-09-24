@@ -32,6 +32,8 @@ export class SwarmappApi {
 	flowId?: string;
 
 	constructor();
+	
+	constructor(oauth_token: string);
 
 	constructor(oauth_token?: string) {
 		this.config = {

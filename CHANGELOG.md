@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.11
+
+### Patch Changes
+
+- fix: constructor
+
 ## 2.7.10
 
 ### Patch Changes
