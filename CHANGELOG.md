@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.10
+
+### Patch Changes
+
+- exporting class, removing type file
+
 ## 2.7.9
 
 ### Patch Changes

@@ -1,6 +1,7 @@
-const _ = require('lodash');
-const axios = require('axios').default;
-const querystring = require('querystring');
+import _ from 'lodash';
+import axios from 'axios';
+import querystring from 'querystring';
+import { between, createLatLngString } from './utils';
 
 // some functions willl not work if the oauth_token was generated through an application created after 2021.
 // you may use a man in the middle proxy to detect your mobile app oauth token
@@ -23,7 +24,7 @@ type swarmConfig =   {
     floorLevel?: string;
 }
 
-class SwarmappApi { 
+export class SwarmappApi { 
 	config: swarmConfig;
 	basePath: string;
 	headers: any;
@@ -37,7 +38,7 @@ class SwarmappApi {
 			m: 'swarm',
 			v: '20221101',
 			// A random coordinate to use between calls imitating regular behavior
-			ll: this.createLatLngString('26.30' + this.between(340000000000, 499999999999), '50.1' + this.between(2870000000000, 3119999999999)), //latitude/longitude
+			ll: createLatLngString('26.30' + between(340000000000, 499999999999), '50.1' + between(2870000000000, 3119999999999)), //latitude/longitude
             altAcc: "30.000000",
             llAcc: "14.825392",
             floorLevel: "2146959360",
@@ -275,7 +276,7 @@ class SwarmappApi {
 
         // probably updates user LL
         const venue_info = await this.getVenue(venue_id);
-        this.config.ll = this.createLatLngString(venue_info.location.lat, venue_info.location.lng);
+        this.config.ll = createLatLngString(venue_info.location.lat, venue_info.location.lng);
 
 		try {
 			const result = await axios.post(this.basePath + 'checkins/add', querystring.stringify(this.config));
@@ -455,14 +456,6 @@ class SwarmappApi {
         }	
 	}
 
-    // Utility functions
-	between(min: number, max: number) {
-		return Math.floor(Math.random() * (max - min) + min);
-	}
-    
-    createLatLngString(lat: string, lng: string){
-        return `${lat},${lng}`;
-    }
 
 	getLL(){
         return this.config.ll;
@@ -488,5 +481,3 @@ class SwarmappApi {
 		}
 	}
 }
-
-module.exports = SwarmappApi;
