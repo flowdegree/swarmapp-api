@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.8.0
+
+### Minor Changes
+
+- chore: removing logging, refactoring functions
+
 ## 2.7.13
 
 ### Patch Changes
