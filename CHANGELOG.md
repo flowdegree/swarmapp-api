@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.12
+
+### Patch Changes
+
+- fix: error logging
+
 ## 2.7.11
 
 ### Patch Changes
