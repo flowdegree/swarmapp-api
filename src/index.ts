@@ -476,10 +476,10 @@ export class SwarmappApi {
 		
 		switch (error?.meta?.code) {
 			case 401:
-				console.log(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
+				console.error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
 		
 			default:
-				console.log(JSON.stringify(`${_prefix} ${error}`, null, 4))
+				console.error(JSON.stringify(`${_prefix} ${error}`, null, 4))
 		}
 	}
 }
