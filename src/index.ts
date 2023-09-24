@@ -469,6 +469,7 @@ export class SwarmappApi {
 		console.log(`${_prefix}) `, message);
 	}
 
+	// I think it should throw error instead of logging
 	error(error: any){
 		let _prefix = `${new Date().toLocaleString()} - `;
 		_prefix += typeof this?.user?.firstName != 'undefined' ? this?.user?.firstName : "unknown user"
@@ -477,9 +478,11 @@ export class SwarmappApi {
 		switch (error?.meta?.code) {
 			case 401:
 				console.error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
+				throw new Error(`${_prefix} [${error.meta.errorType}] ${error.meta.errorDetail}`)
 		
 			default:
 				console.error(JSON.stringify(`${_prefix} ${error}`, null, 4))
+				throw new Error(JSON.stringify(`${_prefix} ${error}`, null, 4))
 		}
 	}
 }

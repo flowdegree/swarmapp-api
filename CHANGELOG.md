@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.7.13
+
+### Patch Changes
+
+- fix: throw error
+
 ## 2.7.12
 
 ### Patch Changes
