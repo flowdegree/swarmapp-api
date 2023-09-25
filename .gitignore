@@ -132,3 +132,4 @@ coverage/
 lib
 test/mytest
 dist/
+dump.json

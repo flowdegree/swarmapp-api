@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.9.0
+
+### Minor Changes
+
+- aBsTr@ct!0n
+
 ## 2.8.1
 
 ### Patch Changes
