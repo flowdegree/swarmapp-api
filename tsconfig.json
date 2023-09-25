@@ -11,5 +11,11 @@
     "noEmit": true 
   },
   "include": ["./src/**/*"],
-  "exclude": ["node_modules", "**/__tests__/*"]
+  "exclude": [
+    "node_modules", 
+    "**/__tests__/*",
+    "examples",
+    "test",
+    "dist"
+  ]
 }
