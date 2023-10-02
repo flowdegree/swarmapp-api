@@ -16,7 +16,7 @@ The `swarmapp-api` library is designed to be used by developers who want to buil
 
 To get started with the SwarmApp API, follow these steps:
 
-1. `$ npm i swarmapp-api`
+1. `$ npm i @flowdegree/swarmapp-api`
 
 ## Example Usage
 
@@ -82,7 +82,7 @@ We welcome contributions from the community! To contribute to the SwarmApp API, 
 2. Create a new branch for your changes: git checkout -b my-feature-branch
 3. Make your changes and commit them: git commit -am "Add new feature"
 4. Push your changes to your fork: git push origin my-feature-branch
-5. Create a pull request against the main branch of the `6degrees/swarmapp-api` repository
+5. Create a pull request against the main branch of the `flowdegree/swarmapp-api` repository
 
 ## License
 

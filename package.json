@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/automaniacs/swarmapp-api.git"
+    "url": "git+https://github.com/flowdegree/swarmapp-api.git"
   },
   "keywords": [
     "api",
@@ -34,9 +34,9 @@
   "author": "Mohannad F. Otaibi",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/6degrees/swarmapp-api/issues"
+    "url": "https://github.com/flowdegree/swarmapp-api/issues"
   },
-  "homepage": "https://github.com/automaniacs/swarmapp-api#readme",
+  "homepage": "https://github.com/flowdegree/swarmapp-api#readme",
   "dependencies": {
     "axios": "^0.26.1",
     "dotenv": "^16.3.1",
