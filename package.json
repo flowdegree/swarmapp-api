@@ -12,6 +12,9 @@
     "build": "pnpm run clean && tsup src/index.ts --format cjs,esm --dts",
     "run-sample": "ts-node examples/example.ts"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/automaniacs/swarmapp-api.git"
