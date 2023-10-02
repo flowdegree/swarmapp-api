@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.10.0
+
+### Minor Changes
+
+- move to @flowdegree
+
 ## 2.9.1
 
 ### Patch Changes
