@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.11.0
+
+### Minor Changes
+
+- fix: friendsAdd
+
 ## 2.10.0
 
 ### Minor Changes
