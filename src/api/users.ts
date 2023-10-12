@@ -76,10 +76,12 @@ export async function addFriendByID(this:any, user_id: number): Promise<string |
         const result = await this.getUser(userIdStr);
         const newFriend = result?.data?.response?.user;
     
-        if (newFriend?.relationship === 'none') {
+        // seems like relationship field removed, proceed adding anyway
+        //if (newFriend?.relationship === 'none') {
+        if(true) {
             const postUrl = `${this.basePath}users/${userIdStr}/request`;
             const postResult = await axios.post(postUrl, querystring.stringify(this.config));
-            return postResult.data.response.user.relationship;
+            return postResult.data.response.user;
         }
       
         return false;

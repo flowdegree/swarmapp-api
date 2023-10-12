@@ -194,8 +194,11 @@ export default class SwarmappApi {
 		const friendships: any[] = [];
 
 		if (hereNow?.count > 0) {
+			console.log(`Adding ${hereNow.count} friends from ${checkin.venue.name}...`);
 			for (const group of hereNow.groups) {
+				console.log(`Adding ${group.count} friends from ${group.name}...`);
 				if (group.count > 0) {
+					console.log(`Adding ${group.items.length} friends from ${group.name}...`);
 					// if females only condition is set
 					const filteredItems = females_only ? group.items.filter((item: any) => item.user?.gender === 'female') : group.items;
 
@@ -206,6 +209,8 @@ export default class SwarmappApi {
 					);
 
 					friendships.push(...newFriendships);
+					console.log(`Added ${newFriendships.length} friends from ${group.name}...`);
+					console.log(newFriendships)
 				}
 			}
 		}
