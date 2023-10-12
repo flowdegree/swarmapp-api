@@ -6,6 +6,7 @@ export async function getVenue(this:any, venue_id: string) {
         const result = await axios.get(`${this.basePath}venues/${venue_id}/`, { 'params': this.config });
         return result.data.response.venue;
     } catch (error: any) {
+        console.log(`error occured while getting venue`)
         throw new Error("Error getting venue data, maybe an authentication error ?");
         return;
     }
@@ -39,7 +40,8 @@ export async function getTrending(this:any, limit: number = 50, ll?: string, nea
         return result.data.response.venues;
     }
     catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting trending venues`)
+        this.error(error)
         return;
     }
 }

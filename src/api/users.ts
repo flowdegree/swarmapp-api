@@ -8,7 +8,8 @@ export async function getFriends(this: any, user_id: string = 'self'): Promise<a
         const result = await axios.get(this.basePath + 'users/' + user_id + '/friends', { 'params': this.config });
         return result.data.response.friends;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting friends`)
+        this.error(error)
         return null;
     }
 }
@@ -23,7 +24,8 @@ export async function getFollowings(this: any, user_id: string = 'self'): Promis
         const result = await axios.get(this.basePath + 'users/' + user_id + '/following', { 'params': this.config });
         return result.data.response.following;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting followings`)
+        this.error(error)
         return null;
     }
 }
@@ -38,7 +40,8 @@ export async function getFollowers(this: any, user_id: string = 'self'): Promise
         const result = await axios.get(this.basePath + 'users/' + user_id + '/followers', { 'params': this.config });
         return result.data.response.followers;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting followers`)
+        this.error(error)
         return null;
     }
 }
@@ -48,6 +51,8 @@ export async function getUser(this:any, user_id: string = 'self') {
         const result = await axios.get(`${this.basePath}users/${user_id}`, { 'params': this.config });
         return result;
     } catch (error: any) {
+        console.log(`error occured while getting user`)
+        this.error(error)
         throw new Error("Error getting user data, maybe an authentication error ?");
         return;
     }
@@ -65,7 +70,8 @@ export async function getCheckins(this:any, user_id: string = 'self', limit: num
         const result = await axios.get(`${this.basePath}users/${user_id}/checkins`, { 'params': this.config });
         return result;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting checkins`)
+        this.error(error)
         return;
     }
 }
@@ -87,6 +93,7 @@ export async function addFriendByID(this:any, user_id: number): Promise<string |
         return false;
     }
     catch (error: any) {
-        this.error(error.response.data);
+        console.log(`error occured while adding friend by id`)
+        this.error(error);
     }
 }

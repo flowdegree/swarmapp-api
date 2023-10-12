@@ -101,7 +101,8 @@ export default class SwarmappApi {
 		try {
 			return this.getUser(user_id);
 		} catch (error: any) {
-			this.error(error.response.data)
+			console.log(`error occured while getting last seen`)
+			this.error(error)
 		}
 	}
 
@@ -115,7 +116,8 @@ export default class SwarmappApi {
 			const response = await axios.get(this.basePath + '/users/' + user_id + '/map', { 'params': this.config });
 			return response.data.response;
 		} catch (error: any) {
-			this.error(error.response.data)
+			console.log(`error occured while getting geos`)
+			this.error(error)
 		}
 	}
 
@@ -148,7 +150,8 @@ export default class SwarmappApi {
 			});
 			return result;
 		} catch (error: any) {
-			this.error(error.response.data)
+			console.log(`error occured while private logging`)
+			this.error(error)
 			return;
 		}
 	}
@@ -181,14 +184,13 @@ export default class SwarmappApi {
 			const registeration = result.data.response?.checkin;
 			return registeration;
 		} catch (error: any) {
-			this.error(error.response.data)
+			console.log(`error occured while registering device`)
+			this.error(error)
 			return;
 		}
-
-
-
 	}
 
+	// TODO: move to client
 	async addHereNow(checkin: any, females_only: boolean = true): Promise<{ hereNow: any, friendships: any[] }> {
 		const hereNow = checkin?.venue?.hereNow;
 		const friendships: any[] = [];
@@ -222,6 +224,7 @@ export default class SwarmappApi {
 	}
 
 	// auto add trending function
+	// TODO: maybe move it to the client, not the library
 	async autoAddTrending(location_name: string, limit_trending: number): Promise<any[]> {
 		try {
 			const trending = await this.getTrending(limit_trending, undefined, location_name);
@@ -237,13 +240,14 @@ export default class SwarmappApi {
 			  return result.filter(item => item !== null);
 		  
 		} catch (error) {
-			console.error("An error occurred:", error);
+			console.log("An error occurred while auto adding trending:");
+			this.error("An error occurred:", error);
 			return [];
-		
 		}
 	}
 
 	// Like Functions
+	// TODO: move it to checkins
 	async likeCheckin(checkin_id: string) {
 		try {
 			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
@@ -255,6 +259,7 @@ export default class SwarmappApi {
 		}
 	}
 
+	// TODO: move to client
 	async likeUnliked(limit: number = 40): Promise<{ succeeded: any[], failed: any[] }> {
 		try {
 			const succeeded: any[] = [];

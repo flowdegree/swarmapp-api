@@ -18,7 +18,8 @@ export async function checkIn(this:any, venue_id: string, silent: boolean) {
         const checkin = result.data.response?.checkin;
         return checkin;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while checking in`)
+        this.error(error)
         return;
     }
 }
@@ -43,7 +44,8 @@ export async function getRecent(this:any, limit: number = 100, ll?: string) {
 
         return result.data.response.recent;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while getting recent`)
+        this.error(error)
         return;
     }
 }

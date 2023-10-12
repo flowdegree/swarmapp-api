@@ -16,6 +16,7 @@ export async function login(this:any, username: any, password: any, client_id: a
         
         return response.data.access_token;
     } catch (error) {
+        console.log(`error occured while logging in`)
         this.error(error)
         return;
     }
@@ -37,7 +38,8 @@ export async function initiatemultifactorlogin(this:any, username: string, passw
 
         return response.data;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while initiating multifactor login`)
+        this.error(error)
         return error;
     }
 }
@@ -57,7 +59,8 @@ export async function completemultifactorlogin(this:any, code: string, client_id
 
         return response.data.access_token;
     } catch (error: any) {
-        this.error(error.response.data)
+        console.log(`error occured while completing multifactor login`)
+        this.error(error)
         return;
     }
 }
