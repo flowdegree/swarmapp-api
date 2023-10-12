@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.11.2
+
+### Patch Changes
+
+- remove user log
+
 ## 2.11.1
 
 ### Patch Changes
