@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.11.3
+
+### Patch Changes
+
+- friends adding workaround
+
 ## 2.11.2
 
 ### Patch Changes
