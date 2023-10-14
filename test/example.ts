@@ -1,4 +1,3 @@
-
 import 'dotenv/config'
 import  SwarmappApi  from '../src';
 
@@ -28,23 +27,22 @@ const  run = async() =>{
     // print the keys for the result return object
     console.log(Object.keys(result));
     //process.exit();
-    console.log("friends", result.items[0]);
+    console.log("friends", result.items[0].handle);
     
 
     // test recent checkins
     result = await swarm.getRecent(1);
-    console.log("checkins", result);
-
+    console.log("checkins", result[0].venue.name);
 
     result = await swarm.getTrending();
     
     // print object keys
-    console.log(Object.keys(result));
+    console.log("trending place", result[0].name);
 
-    console.log("trending in",result[0].name, result[0].hereNow.count);
+    console.log("Trending in",result[0].name, result[0].hereNow.count);
 
-    result = await swarm.autoAddTrending("Khobar",1);
-    console.log("auto add", result);
+    result = await swarm.autoAddTrending("Jeddah",1);
+    console.log("Auto add", result);
     process.exit();
     // test like
     const lastCheckin = await swarm.getRecent({limit:1});

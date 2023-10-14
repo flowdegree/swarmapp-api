@@ -16,7 +16,15 @@ import {
 	completemultifactorlogin,
 	initiatemultifactorlogin,
 	getTrending,
-	getVenue
+	getVenue,
+	getLastSeen, 
+	getGeos,
+	getUserProfile,
+	login,
+	register_device,
+	private_log,
+	likeCheckin
+
  } from './api';
 
 export default class SwarmappApi {
@@ -32,10 +40,14 @@ export default class SwarmappApi {
 	getFollowers: any;
 	getUser: any;
 	addFriendByID: any;
+	getLastSeen: any;
+	getGeos: any;
+	getUserProfile: any;
 
 	checkIn: any;
 	getRecent: any;
 	getCheckins: any;
+	likeCheckin: any;
 
 	completemultifactorlogin: any;
 	initiatemultifactorlogin: any;
@@ -46,6 +58,13 @@ export default class SwarmappApi {
 	log: any;
 	error: any;
 	getLL: any;
+
+	login: any;
+	register_device: any;
+	private_log: any;
+
+
+
 	
 	constructor();
 
@@ -89,105 +108,15 @@ export default class SwarmappApi {
 		this.initiatemultifactorlogin = initiatemultifactorlogin.bind(this);
 		this.getTrending = getTrending.bind(this);
 		this.getVenue = getVenue.bind(this);
+		this.getLastSeen = getLastSeen.bind(this);
+		this.getGeos = getGeos.bind(this);
+		this.getUserProfile = getUserProfile.bind(this);
+		this.login = login.bind(this);
+		this.register_device = register_device.bind(this);
+		this.private_log = private_log.bind(this);
+		this.likeCheckin = likeCheckin.bind(this);
+
 	  	 
-	}
-
-	// Get Commands
-	// TODO: should get user, then get checkins and location of last check-in
-	getLastSeen(user_id: string = 'self', limit: number = 100) {
-		this.config.user_id = user_id;
-		this.config.limit = limit;
-
-		try {
-			return this.getUser(user_id);
-		} catch (error: any) {
-			console.log(`error occured while getting last seen`)
-			this.error(error)
-		}
-	}
-
-	// not sure if it is working
-	async getGeos(user_id: string = 'self') {
-		this.config.user_id = user_id;
-
-		delete this.config.afterTimeStamp;
-
-		try {
-			const response = await axios.get(this.basePath + '/users/' + user_id + '/map', { 'params': this.config });
-			return response.data.response;
-		} catch (error: any) {
-			console.log(`error occured while getting geos`)
-			this.error(error)
-		}
-	}
-
-	// Suspect this method to update user location, doesn't work
-	async private_log() {
-		const FormData = require('form-data');
-
-		const formData = new FormData();
-		formData.append('altAcc', this.config.altAcc);
-		formData.append('llAcc', this.config.llAcc);
-		formData.append('floorLevel', this.config.floorLevel);
-		formData.append('alt', this.config.alt);
-		formData.append('csid', '1243');
-		formData.append('v', this.config.v);
-		formData.append('oauth_token', this.config.oauth_token);
-		formData.append('m', this.config.m);
-		formData.append('ll', this.config.ll);
-		formData.append('background', 'true');
-
-		const script = [{ "name": "ios-metrics", "csid": 1243, "ctc": 4, "metrics": [{ "rid": "642a1e4371f95f2eb16b8eda", "n": "SwarmTimelineFeedViewController", "im": "3-3", "vc": 1 }], "event": "background", "cts": 1680481860.378182 }];
-		const stringified = JSON.stringify(script);
-
-		formData.append('loglines', stringified, { filename: 'loglines', contentType: 'application/json' });
-
-		try {
-			const result = await axios.post(this.basePath + 'private/log', formData, {
-				headers: {
-					...formData.getHeaders()
-				}
-			});
-			return result;
-		} catch (error: any) {
-			console.log(`error occured while private logging`)
-			this.error(error)
-			return;
-		}
-	}
-
-	async register_device() {
-		const params = {
-			limitAdsTracking: '1',
-			carrier: 'stc',
-			hasWatch: '1',
-			csid: '1242',
-			alt: '11.791945',
-			llAcc: '14.825392',
-			otherDeviceIds: '6054750ee01fbc1e3492a745,61187d1fceb2110097a0fc02',
-			ll: '21.530136,39.172863',
-			altAcc: '17.547791',
-			locationAuthorizationStatus: 'authorizedwheninuse',
-			token: 'ec0718c5d042b63587c14d461bb077d1262811456c4799558e1df2616f02cc9a',
-			oauth_token: 'DW233H4JWJZ0E14QU01LFWUZL4RDQPLAF10BAJEI2FTWNOKH',
-			iosSettings: '0',
-			m: 'swarm',
-			floorLevel: '2146959360',
-			measurementSystem: 'metric',
-			uniqueDevice: '6054750ee01fbc1e3492a745',
-			v: '20221101',
-			backgroundRefreshStatus: 'available',
-		}
-
-		try {
-			const result = await axios.post(this.basePath + '/private/registerdevice ', querystring.stringify(params));
-			const registeration = result.data.response?.checkin;
-			return registeration;
-		} catch (error: any) {
-			console.log(`error occured while registering device`)
-			this.error(error)
-			return;
-		}
 	}
 
 	// TODO: move to client
@@ -196,13 +125,17 @@ export default class SwarmappApi {
 		const friendships: any[] = [];
 
 		if (hereNow?.count > 0) {
-			console.log(`Adding ${hereNow.count} friends from ${checkin.venue.name}...`);
+			console.log(`Found ${hereNow.count} friends from ${checkin.venue.name}...`);
 			for (const group of hereNow.groups) {
-				console.log(`Adding ${group.count} friends from ${group.name}...`);
+				console.log(`${group.count} friends in ${group.name} group...`);
 				if (group.count > 0) {
-					console.log(`Adding ${group.items.length} friends from ${group.name}...`);
 					// if females only condition is set
 					const filteredItems = females_only ? group.items.filter((item: any) => item.user?.gender === 'female') : group.items;
+					//console.log(filteredItems)
+					const friendNames = filteredItems.map((friend: any) => `${friend.user.firstName} (${friend.user.handle}) # ${friend.user.id}`);
+
+					console.log(`Adding ${filteredItems.length} friends from ${group.name}...`);
+					console.log(friendNames.join(', '));
 
 					const newFriendships = await Promise.all(
 						filteredItems.map(async (item:any) => {
@@ -212,7 +145,9 @@ export default class SwarmappApi {
 
 					friendships.push(...newFriendships);
 					console.log(`Added ${newFriendships.length} friends from ${group.name}...`);
-					console.log(newFriendships)
+					
+					//console.log(newFriendships)
+					console.log(friendNames)
 				}
 			}
 		}
@@ -227,7 +162,10 @@ export default class SwarmappApi {
 	// TODO: maybe move it to the client, not the library
 	async autoAddTrending(location_name: string, limit_trending: number): Promise<any[]> {
 		try {
+			// get trending venues
 			const trending = await this.getTrending(limit_trending, undefined, location_name);
+
+			// add here now from trending venues
 			const resultPromises = trending.map(async (venue:any) => {
 				if (venue.hereNow.count > 0) {
 				  const checkin = await this.checkIn(venue.id, true);
@@ -237,26 +175,13 @@ export default class SwarmappApi {
 			  });
 		  
 			  const result = await Promise.all(resultPromises);
-			  //console.log(result);
+			  
 			  return result.filter(item => item !== null);
 		  
 		} catch (error) {
 			console.log("An error occurred while auto adding trending:");
 			this.error("An error occurred:", error);
 			return [];
-		}
-	}
-
-	// Like Functions
-	// TODO: move it to checkins
-	async likeCheckin(checkin_id: string) {
-		try {
-			const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
-			return result;
-		} 
-		catch (error: any) {
-			this.error(error.response.data)
-			return;
 		}
 	}
 

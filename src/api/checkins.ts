@@ -49,3 +49,14 @@ export async function getRecent(this:any, limit: number = 100, ll?: string) {
         return;
     }
 }
+
+export async function likeCheckin(this:any, checkin_id: string) {
+    try {
+        const result = await axios.post(this.basePath + 'checkins/' + checkin_id + '/like', querystring.stringify(this.config));
+        return result;
+    } 
+    catch (error: any) {
+        this.error(error.response.data)
+        return;
+    }
+}
