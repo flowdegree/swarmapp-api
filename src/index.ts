@@ -237,6 +237,7 @@ export default class SwarmappApi {
 			  });
 		  
 			  const result = await Promise.all(resultPromises);
+			  //console.log(result);
 			  return result.filter(item => item !== null);
 		  
 		} catch (error) {

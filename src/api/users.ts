@@ -79,21 +79,33 @@ export async function getCheckins(this:any, user_id: string = 'self', limit: num
 export async function addFriendByID(this:any, user_id: number): Promise<string | boolean | void> {
     try {
         const userIdStr = user_id.toString();
+        const parameters = {
+            oauth_token: this.config.oauth_token,
+            v: this.config.v,
+        }
         const result = await this.getUser(userIdStr);
         const newFriend = result?.data?.response?.user;
+        //console.log(newFriend);
+        //process.exit();
     
         // seems like relationship field removed, proceed adding anyway
         //if (newFriend?.relationship === 'none') {
         if(true) {
             const postUrl = `${this.basePath}users/${userIdStr}/request`;
-            const postResult = await axios.post(postUrl, querystring.stringify(this.config));
-            return postResult.data.response.user;
+            console.log(`Adding friend by id ${newFriend.handle}...`)
+            //console.log(querystring.stringify(this.config));
+            // add querystring params to the url
+            const result = await axios.post(`${postUrl}?${querystring.stringify(parameters)}`);
+            return result.data.response.user;
         }
       
         return false;
     }
     catch (error: any) {
-        console.log(`error occured while adding friend by id`)
-        this.error(error);
+        // skip the error as a workaround
+        console.log(`error occured while adding friend by id ${user_id}`)
+        //console.log(error.response);
+        //this.error(error);
+        return;
     }
 }

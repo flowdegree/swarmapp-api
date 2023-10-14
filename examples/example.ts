@@ -8,30 +8,44 @@ const password:string = process.env.password || "";
 const client_id:string = process.env.client_id || "";
 const client_secret:string = process.env.client_secret || "";
 
-
-console.log(token);
-const swarm = new SwarmappApi(token);
-
 const  run = async() =>{
+    console.log(token);
+    const swarm = new SwarmappApi(token);
+
     let result: any;
 
     result = await swarm.initialize();
-    console.log(result);
+    //console.log(result);
 
-    // attempt authentication multifactor
-    result = await swarm.initiatemultifactorlogin(username, password, client_id, client_secret);
-    console.log(result);
-    process.exit(0);
+    // // attempt authentication multifactor
+    // result = await swarm.initiatemultifactorlogin(username, password, client_id, client_secret);
+    // console.log(result);
+    // process.exit(0);
 
 
     // test friends
     result = await swarm.getFriends();
-    console.log("friends", result);
+    // print the keys for the result return object
+    console.log(Object.keys(result));
+    //process.exit();
+    console.log("friends", result.items[0]);
+    
 
     // test recent checkins
-    result = await swarm.getRecent({limit:1});
+    result = await swarm.getRecent(1);
     console.log("checkins", result);
 
+
+    result = await swarm.getTrending();
+    
+    // print object keys
+    console.log(Object.keys(result));
+
+    console.log("trending in",result[0].name, result[0].hereNow.count);
+
+    result = await swarm.autoAddTrending("Khobar",1);
+    console.log("auto add", result);
+    process.exit();
     // test like
     const lastCheckin = await swarm.getRecent({limit:1});
     result = await swarm.likeCheckin(lastCheckin[0].id);

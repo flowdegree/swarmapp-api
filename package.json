@@ -10,7 +10,7 @@
     "clean": "shx rm -rf lib && shx rm -rf dist",
     "lint": "tsc",
     "build": "pnpm run clean && tsup src/index.ts --format cjs,esm --dts",
-    "run-sample": "ts-node examples/example.ts"
+    "test:example": "ts-node examples/example.ts"
   },
   "publishConfig": {
     "access": "public"
