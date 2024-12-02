@@ -3,7 +3,7 @@ import querystring from 'querystring';
 import { createLatLngString } from '../utils';
 
 // Checkin Functions
-export async function checkIn(this:any, venue_id: string, silent: boolean) {
+export async function checkIn(this:any, venue_id: string, silent: boolean = false) {
     if (silent) {
         this.config.broadcast = 'private';
     }
