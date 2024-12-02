@@ -1,5 +1,11 @@
 # swarmapp-api
 
+## 2.12.1
+
+### Patch Changes
+
+- Auto broadcast true
+
 ## 2.12.0
 
 ### Minor Changes
